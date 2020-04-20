@@ -127,6 +127,8 @@ Basic example:
 @input(id="id1" value="hello world$somevar" type="text" )
 ```
 
+![](docs/input_label.jpg)
+
 ### label
 
 It shows a label html
@@ -135,6 +137,8 @@ It shows a label html
 @label(for="id1" text="hello world:") 
 ```
 
+![](docs/input_label.jpg)
+
 ### image
 
 It shows an image
@@ -142,6 +146,8 @@ It shows an image
 ```
 @image(src="https://via.placeholder.com/350x150")
 ```
+
+![](docs/image.jpg)
 
 ### select
 
@@ -159,6 +165,8 @@ Example:
 ```
 
 > Note: items requires to set arguments
+
+![](docs/select.jpg)
 
 ### item
 
@@ -238,7 +246,7 @@ Example:
 
 > Note: this tag must be ended with the tag @endoptgroup
 
-
+![](docs/optgroup.jpg)
 
 ### checkbox
 
@@ -250,6 +258,8 @@ Example:
 @checkbox(id="idsimple" value="1" checked="1" post="it is a selection")
 ```
 
+![](docs/checkbox.jpg)
+
 ### radio
 
 It adds a single radio button
@@ -259,6 +269,8 @@ Example:
 ```
 @radio(id="idsimple" value="1" checked="1" post="it is a selection")
 ```
+
+![](docs/radio.jpg)
 
 ### textarea
 
@@ -270,6 +282,8 @@ Example:
 @textarea(id="aaa" value="3333 3333 aaa3333 ")
 ```
 
+![](docs/textarea.jpg)
+
 ### button
 
 It draws a button
@@ -280,6 +294,8 @@ Example:
 @button(value="click me" type="submit" class="test" onclick='alert("ok")')
 ```
 
+![](docs/button.jpg)
+
 ### link
 
 It adds an hyperlink
@@ -289,6 +305,8 @@ Example:
 ```
 @link(href="https://www.google.cl" text="context")
 ```
+
+![](docs/link.jpg)
 
 ### checkboxes
 
@@ -302,6 +320,8 @@ It shows a list of checkboxes
 @endcheckboxes
 ```
 
+![](docs/checkbox.jpg)
+
 ### radios
 
 It shows a list of radio buttons
@@ -314,6 +334,8 @@ It shows a list of radio buttons
 @endradios
 ```
 
+![](docs/radio.jpg)
+
 ### file
 
 It generates a file input value
@@ -323,6 +345,8 @@ It generates a file input value
 ```
 
 > Note: it also renders a hidden file with name "name"+"_file" with the original value
+
+![](docs/file.jpg)
 
 ### ul
 
@@ -337,6 +361,8 @@ It generates an unsorted list
 @endul
 ```
 
+![](docs/ul.jpg)
+
 ### ol
 
 It generates a sorted list
@@ -349,6 +375,8 @@ It generates a sorted list
     @items(value=$country->id text=$country->name)
 @endol
 ```
+
+![](docs/ol.jpg)
 
 ### table
 
@@ -373,6 +401,8 @@ It renders a table
     @endtablefooter
 @endtable
 ```
+
+![](docs/table.jpg)
 
 #### tablehead
 
