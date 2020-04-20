@@ -9,26 +9,19 @@ namespace eftec\bladeonehtml;
 
 /**
  * trait BladeOneHtml
- * Copyright (c) 2016 Jorge Patricio Castro Castillo MIT License. Don't delete this comment, its part of the license.
- * Extends the tags of the class BladeOne.  Its optional
+ * Copyright (c) 2020 Jorge Patricio Castro Castillo MIT License. Don't delete this comment, its part of the license.
  * It adds the next tags
  * <code>
- * select:
- * @select(id="aaa" value=$selection values=$countries alias=$country)
- * @item(value='aaa' text='hello world')
- * @items( value=$country->id text=$country->name)
- * @endselect
- * input:
- * @ input('iduser',$currentUser,'text'[,$extra])
- * button:
- * @ commandbutton('idbutton','value','text'[,$extra])
+ * @form()
+ * @input(type="text" name="myform" value=$myvalue)
+ * @button(type="submit" value="Send")
+ * @endform()
  *
  * </code>
- * Note. The names of the tags are based in Java Server Faces (JSF)
  *
  * @package  BladeOneHtml
  * @version  1.0
- * @link     https://github.com/EFTEC/BladeOne
+ * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
 trait BladeOneHtml
