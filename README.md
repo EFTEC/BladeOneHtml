@@ -72,7 +72,7 @@ This library uses the native html arguments but some arguments are special
 
 | Argument | Description                                                  | example                                                      |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> <tag>hello&lt;/tag&gt;                 |
+| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> &lt;tag&gt;hello&lt;/tag&gt;           |
 | pre      | It adds a content before the tag                             | @tag(pre="hello") -> hello&lt;tag&gt;&lt;/tag&gt;            |
 | post     | It adds a content after the tag                              | @tag(post="hello") -> &lt;tag&gt;&lt;/tag&gt;hello           |
 | between  | It adds a content between the tags (it works similar than text) | @tag(between="hello") -> &lt;tag&gt;hello&lt;/tag&gt;        |
