@@ -66,17 +66,17 @@ $blade=new myBlade();
 
 This library adds a new set of tags for the template. The tags uses named arguments, so it is easily configurable.
 
-> @<tag>(argument1="value" argument2='value' argument3=value argument4=$variable argument5=function(), argument6="aaa $aaa")
+> @&lt;tag&gt;(argument1="value" argument2='value' argument3=value argument4=$variable argument5=function(), argument6="aaa $aaa")
 
 This library uses the native html arguments but some arguments are special
 
 | Argument | Description                                                  | example                                                      |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> <tag>hello</tag>                       |
-| pre      | It adds a content before the tag                             | @tag(pre="hello") -> hello< tag>< /tag>                      |
-| post     | It adds a content after the tag                              | @tag(post="hello") -> < tag>< /tag>hello                     |
-| between  | It adds a content between the tags (it works similar than text) | @tag(between="hello") -> < tag>hello< /tag>                  |
-| value    | Usually it works as the normal "**value**" of html but it also could works differently (in @textarea works like **text**) | @tag(value="hello") -> < tag value="hello">< /tag>           |
+| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> <tag>hello&lt;/tag&gt;                 |
+| pre      | It adds a content before the tag                             | @tag(pre="hello") -> hello&lt;tag&gt;&lt;/tag&gt;            |
+| post     | It adds a content after the tag                              | @tag(post="hello") -> &lt;tag&gt;&lt;/tag&gt;hello           |
+| between  | It adds a content between the tags (it works similar than text) | @tag(between="hello") -> &lt;tag&gt;hello&lt;/tag&gt;        |
+| value    | Usually it works as the normal "**value**" of html but it also could works differently (in @textarea works like **text**) | @tag(value="hello") -> < tag value="hello">&lt;/tag&gt;      |
 | values   | Some components needs a list of object/arrays.  This argument is used to sets the list of values | @tag(values=$countries)                                      |
 | alias    | Some components needs or use a list of object/array. This argument is to reference any row inside the list.  If **values** is set and **alias** is missing, then it creates a new alias called values+"Row". | @tag($values=$countries alias=$country)<br />@tag($values=$countries ) **it asumes  alias=$countriesRow** |
 | optgroup | The tag @select could list grouped elements. This argument is used to set the grouping | @tag($values=$countries alias=$country @optgroup=$country->continent) |
@@ -538,12 +538,12 @@ Variables inside the code
 
 | variable    | explanation                                                  |
 | ----------- | ------------------------------------------------------------ |
-| {{pre}}     | The code before the tag : **pre** &lt;tag  >< /tag>          |
-| {{post}}    | The code after the tag : < tag  >< /tag> **post**            |
-| {{inner}}   | The attributes inside the tag : < tag **inside** > < /tag>   |
-| {{between}} | The content between the tag : < tag >**between**< /tag>      |
-| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > < /tag> |
-| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > < /tag> |
+| {{pre}}     | The code before the tag : **pre** &lt;tag  >&lt;/tag&gt;     |
+| {{post}}    | The code after the tag : < tag  >&lt;/tag&gt; **post**       |
+| {{inner}}   | The attributes inside the tag : < tag **inside** > &lt;/tag&gt; |
+| {{between}} | The content between the tag : < tag >**between**&lt;/tag&gt; |
+| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > &lt;/tag&gt; |
+| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > &lt;/tag&gt; |
 
 Example of a normal tag:
 
