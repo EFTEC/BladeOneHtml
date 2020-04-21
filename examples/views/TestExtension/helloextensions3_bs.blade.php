@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    
+    @cssbox
 </head>
 <body>
 
 
 
 <h1>Example of BladeOne Extensions2</h1>
+
+@alert(text="hi there" class="alert-danger" customtag="it is a custom tag")<br>
+
+@alert(text="hi there" class="alert-danger" )<br>
 
 @label(for="id1" text="hello world:") @input(id="id1" value="hello world$somevar" type="text" )
 <hr>
@@ -74,7 +72,7 @@ aaa3333
 @radios(id="radioid" name="radioid" value=$selection  alias=$country)
     @item(value='aaa' text='hello world' post="<br>")
     @item(value='aaa' text='hello world2' post="<br>")
-    @items(values=$countries  text='name' post="<br>")
+    @items(values=$countries value='id'  text='name' post="<br>")
 @endradios
 <br>
 @file(name="file" value="123.jpg" post="hello world")
@@ -114,5 +112,8 @@ aaa3333
 <br>
 <br>
 <br>
+@jsbox
+
+@jscodebox(ready=1)
 </body>
 </html> 

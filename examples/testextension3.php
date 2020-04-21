@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection DuplicatedCode */
 /**
  * Copyright (c) 2016 Jorge Patricio Castro Castillo MIT License.
  */
@@ -16,6 +16,9 @@ class myBlade extends  BladeOne {
 
 $blade=new myBlade($views,$compiledFolder);
 $blade->setMode(BladeOne::MODE_DEBUG);
+$blade->customAttr['customtag']='XXXXX';
+
+$blade->pattern['alert']='{{pre}}<div {{inner}}><h1>{{customtag}}</h1>{{between}}</div>{{post}}';
 
 //<editor-fold desc="Example data">
 $countries=array();

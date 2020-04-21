@@ -16,8 +16,11 @@ class myBlade extends  BladeOne {
 
 $blade=new myBlade($views,$compiledFolder);
 $blade->setMode(BladeOne::MODE_DEBUG);
-$blade->useBootstrap4();
+$blade->customAttr['customtag']='This attr is missing!';
+$blade->useBootstrap4(true);
+$blade->pattern['alert']='{{pre}}<div {{inner}}><h1>{{customtag}}</h1>{{between}}</div>{{post}}';
 
+$blade->addJsCode('alert("hello");');
 //<editor-fold desc="Example data">
 $countries=array();
 $country=new stdClass();

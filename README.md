@@ -17,6 +17,9 @@ This library works in two ways:
 [![php](https://img.shields.io/badge/php-7.x-green.svg)]()
 [![CocoaPods](https://img.shields.io/badge/docs-70%25-yellow.svg)]()
 
+[TOC]
+
+
 ## Usage
 
 1. This library requires eftec/bladeone. You could install via Composer in the root folder of your project as
@@ -128,6 +131,17 @@ Basic example:
 ```
 
 ![](docs/input_label.jpg)
+
+
+### hidden
+
+It generates a hidden field
+
+Basic example:
+
+```
+@hidden(name="id1" value="hello world$somevar" )
+```
 
 ### label
 
@@ -424,11 +438,245 @@ It generates a row inside the body
 
 It renders a cell inside the tablehead,tablebody (tablerows) or tablefooter
 
+### cssbox
+
+It render and css added into the box
+
+```html
+<head>   
+	@cssbox
+</head>
+```
+
+#### How to add a new css into the cssbox?
+
+Using the method addCss($css,$name)
+
+```php
+$this->addCss('<link rel="stylesheet" href="mystyle.css">','mystyle'); 
+$this->addCss('css/stylename.css'); 
+```
+
+**$css** could be a link or a link tag
+
+**$name** is optional but it avoids to add duplicates. If we add a new CSS with the same name than a previous one, then it is ignored.
+
+### jsbox
+
+It renders all JavaScript links added to the box
+
+```html
+<body>
+    <!-- our page -->
+	@jsbox
+</body>
+```
+
+#### How to add a new JavaScript into the cssbox?
+
+Using the method addJs($script,$name)
+
+```php
+$this->addJs('<script src="js/jquery.js"></script>','jquery');
+```
+
+### jscodebox
+
+```html
+<body>
+    <!-- our page -->
+    @jsbox <!-- we could load jquery here -->
+	@jscodebox(ready)
+</body>
+```
+
+This code adds the tags < script > automatically.
+
+The argument ready indicates if we want to execute the function when the document is ready.
+
+How to add a new JavaScript code into the jscodebox?
+
+```php
+$blade->addJsCode('alert("hello");');
+```
+
+
+
+## Template Customization
+
+BladeOneHtml allows to modify the tags and to set a default class.
+
+You can set a default class and tags for Bootstrap 4 using the next method.
+
+```php
+$blade->useBootstrap4(true); // if true then it loads the css and js into the css and jsbox
+```
+
+Or you could create your own tags and classes
+
+### Set a default class
+
+```php
+$blade->defaultClass[$tagname]='default class';
+```
+
+### Set a custom tag
+
+```php
+$blade->pattern['nametag']='pattern';
+```
+
+Where nametag could be as follow
+
+| Name          | Description                                                  | Example     | Code                                                 |
+| ------------- | ------------------------------------------------------------ | ----------- | ---------------------------------------------------- |
+| nametag       | It uses the pattern to use when the tag is used              | input       | {{pre}}<input{{inner}} >{{between}}< /input>{{post}} |
+| nametag_empty | The system uses this pattern if the content (between/text) is empty or not set (a self close tag). If not set, then the system uses nametag  even if the content is empty | input_empty | {{pre}}< input{{inner}} />{{post}}                   |
+| nametag_item  | The system uses this pattern for tags @item and @items       | select_item | < option{{inner}} >{{between}}< /option>             |
+| nametag_end   | It uses this pattern when the tag must be closed             | form_end    | < /form>                                             |
+
+Variables inside the code
+
+| variable    | explanation                                                  |
+| ----------- | ------------------------------------------------------------ |
+| {{pre}}     | The code before the tag : **pre** &lt;tag  >< /tag>          |
+| {{post}}    | The code after the tag : < tag  >< /tag> **post**            |
+| {{inner}}   | The attributes inside the tag : < tag **inside** > < /tag>   |
+| {{between}} | The content between the tag : < tag >**between**< /tag>      |
+| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > < /tag> |
+| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > < /tag> |
+
+Example of a normal tag:
+
+```php
+$blade->pattern['input']='{{pre}}<input{{inner}} >{{between}}</input>{{post}}';
+```
+
+#### Custom attribute
+
+It is possible to add a custom attribute that it could be used inside a pattern.
+
+For example, let's add the custom tag called **customtag**
+
+```php
+$blade->customAttr['customtag']='This attr is missing!'; 
+$blade->pattern['alert']='{{pre}}<div {{inner}}><h1>{{customtag}}</h1>{{between}}</div>{{post}}';
+```
+
+And in the view
+
+```html
+@alert(text="hi there" class="alert-danger" customtag="it is a custom tag")<br>
+@alert(text="hi there" class="alert-danger" )<br>
+```
+
+## Creating a new tag
+
+It is possible to extend the class and add new tags.
+
+#### 1- Adding a new pattern
+
+```
+$this->pattern['mynewtag']='<mycustomtag {{inner}}>{{between}}</mycustomtag>';
+```
+
+#### 2- Creating a new method
+
+You could create a new class, trait and extend the class BladeOne. Inside this new structure, you must add a new method with the next structure
+
+```php
+protected function compileMyNewTag($expression) { // the method must be called "compile" + your name of tag.
+	$args = $this->getArgs($expression); // it separates the values of the tags
+    $result = ['', '', '', '']; // inner, between, pre, post
+    // your custom code here
+    return $this->render($args, 'mynewtag', $result); // we should indicate to use our pattern.
+}
+```
+
+#### 3- Creating a new parent Method (container method)
+
+For creating a parent method, you must push a new value inside $this->htmlItem. You can store whatever you want to.
+
+```php
+$this->pattern['mynewtag']='<mycustomtag {{inner}}>{{between}}';
+```
+
+
+
+```php
+protected function compileMyNewTag($expression) {
+	$args = $this->getArgs($expression); // it loads and separates the arguments.
+    \array_push($this->htmlItem, ['type' => 'mynewtag','value' => @$args['value']
+    ]);
+    $result = ['', '', '', '']; // inner, between, pre, post
+    //unset($args['value']); // we could unset values that we don't want to be rendered.
+    return $this->render($args, 'select', $result);
+}
+
+```
+
+> Our objective is to render PHP code, not to evaluate a code. For example, if $args['somearg']=$variable, then our value is $variable (as text), no matter the real value of the variable.
+
+You must also create a method to end the container and we must also add a new pattern.
+
+```php
+$this->pattern['mynewtag_end']='</mycustomtag>';
+```
+
+```php
+protected function compileEndNewTag() {
+    $parent = @\array_pop($this->htmlItem); // remove the element from the stack
+    if (\is_null($parent) || $parent['type']!='newtag') { // if no element in the stack or it's a wrong one then error
+        $this->showError("@endnewtag", "Missing @initial tag", true);
+    }
+    // our code
+    return $this->pattern[$parent['type'] . '_end']; // renders the element of the stack
+}
+```
+
+Our items could know if they are inside a tag with the next operation
+
+```php
+$parent = \end($this->htmlItem);
+```
+
+#### 4- Advanced 
+
+We could create a component that requires CSS and JavaScript.
+
+For example a date picker.
+
+```php
+protected function compileDatePicker($expression) {
+	$args = $this->getArgs($expression); // it loads and separates the arguments.
+    \array_push($this->htmlItem, ['type' => 'mynewtag','value' => @$args['value']]);
+    $result = ['', '', '', '']; // inner, between, pre, post
+    if(!isset($args['id'])) {
+        $this->showError("@datepicker", "Missing @id tag", true);
+    }    
+    $this->addJs('<script src="js/jquery.js"></script>','jquery'); // our script needs jquery (if it is not loaded)
+    $this->addCss('css/datepicker.css','datepicker'); 
+    $this->addjscode('$(.'.$args['id'].').datepicker();')
+    
+    //unset($args['value']); // we could unset values that we don't want to be rendered.
+    return $this->render($args, 'select', $result);
+}
+```
+
+>  Note: It's better to add jQuery and date picker once
+
+
+
 ## Version history
 
-1.1 2020/04/21 
+* 1.2 2020/04/21  
+    * tag @@alert()  
+    * fixed: @@items() now it keeps the selection   
+    * tag @@cssbox, @@jsbox and @jscodebox
+    * method useBootstrap4($cdn=false) has a new argument
+* 1.1 2020/04/21 
     * Method isVariablePHP() moved to BladeOne
     * Update LICENSE.
     * Added more documentation.    
-1.0 2020-04-20 First version
+* 1.0 2020-04-20 First version
 

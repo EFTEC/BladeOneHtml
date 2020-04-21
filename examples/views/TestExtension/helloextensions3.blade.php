@@ -16,7 +16,7 @@
 @endselect
 
 
-<hr>select:<br>
+<hr>select: (current selection: {{$selection}}<br>
 @select(id="aaa" value=$selection values=$countries)
     @item(value='aaa' text='hello world')
     @item(value='aaa' text='hello world')
