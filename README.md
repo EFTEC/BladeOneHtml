@@ -8,7 +8,6 @@ This library works in two ways:
 
 
 
-
 [![Packagist](https://img.shields.io/packagist/v/eftec/bladeonehtml.svg)](https://packagist.org/packages/eftec/bladeonehtml)
 [![Total Downloads](https://poser.pugx.org/eftec/bladeonehtml/downloads)](https://packagist.org/packages/eftec/bladeonehtml)
 [![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)]()
@@ -73,7 +72,7 @@ This library uses the native html arguments but some arguments are special
 
 | Argument | Description                                                  | example                                                      |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> < tag>hello< /tag>                     |
+| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> <tag>hello</tag>                       |
 | pre      | It adds a content before the tag                             | @tag(pre="hello") -> hello< tag>< /tag>                      |
 | post     | It adds a content after the tag                              | @tag(post="hello") -> < tag>< /tag>hello                     |
 | between  | It adds a content between the tags (it works similar than text) | @tag(between="hello") -> < tag>hello< /tag>                  |
