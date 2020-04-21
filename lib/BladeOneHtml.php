@@ -20,7 +20,7 @@ namespace eftec\bladeonehtml;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.0
+ * @version  1.1
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -259,12 +259,7 @@ trait BladeOneHtml
         return $html;
     }
 
-    protected function isVariablePHP($text) {
-        if (!$text) {
-            return false;
-        }
-        return substr($text, 0, 1) === '$';
-    }
+
 
     protected function compileTextArea($expression) {
         $args = $this->parseArgs($this->stripParentheses($expression), ' ');

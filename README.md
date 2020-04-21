@@ -426,5 +426,9 @@ It renders a cell inside the tablehead,tablebody (tablerows) or tablefooter
 
 ## Version history
 
+1.1 2020/04/21 
+    * Method isVariablePHP() moved to BladeOne
+    * Update LICENSE.
+    * Added more documentation.    
 1.0 2020-04-20 First version
 
