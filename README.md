@@ -47,7 +47,7 @@ echo $blade->run("exampleview", ['myvalue'=>$myvalue]);
 3. Create a folders called  📁 "\views" and 📁 "\compiles"
 4. Inside views, creates the next file 📄  "\views\exampleview.blade.php"
 
-```
+```php
 <body>
     @form()
         @input(type="text" name="myform" value=$myvalue)
@@ -177,13 +177,14 @@ Example:
 @endselect
 ```
 
-> Note: items requires to set arguments
+> Note: items requires the arguments values and value (parent) and value and text (items)
 
 ![](docs/select.jpg)
 
 ### item
 
-It is an utilitarian tag used inside some tags.  This behave depending of their parent tag. It adds a simple line/row to the parent object.
+**@item** is an utilitary tag used inside other thags.  This behave depending on of their parent tag. It adds a simple 
+line/row to the parent object.
 
 Example:
 
@@ -204,7 +205,8 @@ It renders
 
 ### items
 
-It is an utilitarian tag used inside some tags. This behave depending of their parent tag. It adds a multiples lines/rows to the parent object using the tag **values**
+**@items** is an utilitarian tag used inside some tags. This behave depending on of their parent tag. It adds a 
+multiples lines/rows to the parent object using the tag **values**
 
 > Note: This tag requires some arguments:
 >
@@ -491,7 +493,7 @@ $this->addJs('<script src="js/jquery.js"></script>','jquery');
 
 This code adds the tags < script > automatically.
 
-The argument ready indicates if we want to execute the function when the document is ready.
+The argument **ready** indicates if we want to execute the function when the document is ready.
 
 How to add a new JavaScript code into the jscodebox?
 
@@ -503,13 +505,18 @@ $blade->addJsCode('alert("hello");');
 
 ## Template Customization
 
-BladeOneHtml allows to modify the tags and to set a default class.
+**BladeOneHtml** allows to modify the tags used and to set a default classes for each class.
 
-You can set a default class and tags for Bootstrap 4 using the next method.
+You can set a default class and tags for Bootstrap 3/4 using the next method (pick only one).
 
 ```php
-$blade->useBootstrap4(true); // if true then it loads the css and js into the css and jsbox
+// if true then it loads the css and js from a cdn into the css and jsbox so it requires @cssbox and @jsbox
+$blade->useBootstrap4(true); 
+// if true then it loads the css and js from a cdn into the css and jsbox so it requires @cssbox and @jsbox
+$blade->useBootstrap3(true); 
 ```
+
+
 
 Or you could create your own tags and classes
 
@@ -519,7 +526,7 @@ Or you could create your own tags and classes
 $blade->defaultClass[$tagname]='default class';
 ```
 
-### Set a custom tag
+### Set a custom pattern
 
 ```php
 $blade->pattern['nametag']='pattern';
@@ -534,7 +541,7 @@ Where nametag could be as follow
 | nametag_item  | The system uses this pattern for tags @item and @items       | select_item | < option{{inner}} >{{between}}< /option>             |
 | nametag_end   | It uses this pattern when the tag must be closed             | form_end    | < /form>                                             |
 
-Variables inside the code
+#### Pattern-Variables inside the code
 
 | variable    | explanation                                                  |
 | ----------- | ------------------------------------------------------------ |
@@ -569,9 +576,78 @@ And in the view
 @alert(text="hi there" class="alert-danger" )<br>
 ```
 
-## Creating a new tag
+## Methods
 
-It is possible to extend the class and add new tags.
+The library has a lit of methods that they could be used to initialize and configure the library. They are optionals.
+
+### useBootstrap4
+
+```php
+$blade->useBootstrap4(true); 
+```
+
+### useBootstrap3
+
+```php
+$blade->useBootstrap3(true); 
+```
+
+### addCss
+
+```php
+$this->addCss('css/datepicker.css','datepicker'); 
+```
+
+### addJS
+
+```php
+$this->addJs('<script src="js/jquery.js"></script>','jquery');
+```
+
+### addJSCode
+
+```php
+$blade->addJsCode('alert("hello");');
+```
+
+
+
+## Public Fields
+
+It is the list of public fields of the class. The fields are public because for performance purpose (versus to use setter and getters)
+
+### $pattern
+
+It stores the list of patterns used by the code
+
+```php
+$this->pattern['sometag']='{{pre}}<tag {{inner}}>{{between}}</tag>{{post}}';
+
+```
+
+> Note: see "Pattern-Variable inside the code" to see the list of pattern-variables
+
+### $defaultClass
+
+The default CSS class added to a specific tag.
+
+```php
+$this->defaultClass['sometag']='classred classbackgroundblue';
+```
+
+### $customAttr
+
+It adds a custom adds that it could be used together with $this->pattern
+
+```php
+$this->customAttr['customtag']='XXXXX'; // So we could use the tag {{customtag}}. 'XXXXX' is the default value
+```
+
+> The custom attribute always removes the quotes and double quotes, so if our value is "hello" -> hello
+
+## Creating a new pattern
+
+It is possible to add a new pattern by extending the PHP class.
 
 #### 1- Adding a new pattern
 
@@ -581,16 +657,43 @@ $this->pattern['mynewtag']='<mycustomtag {{inner}}>{{between}}</mycustomtag>';
 
 #### 2- Creating a new method
 
-You could create a new class, trait and extend the class BladeOne. Inside this new structure, you must add a new method with the next structure
+You could create a new PHP class or trait and extend our class. Inside this new structure, you must add a new method with the next structure
+
+Using a new class
 
 ```php
-protected function compileMyNewTag($expression) { // the method must be called "compile" + your name of tag.
-	$args = $this->getArgs($expression); // it separates the values of the tags
-    $result = ['', '', '', '']; // inner, between, pre, post
-    // your custom code here
-    return $this->render($args, 'mynewtag', $result); // we should indicate to use our pattern.
+class MyBlade extends  BladeOne {
+    use BladeOneHtml;
+}
+class MyClass extends MyBlade {
+    protected function compileMyNewTag($expression) { // the method must be called "compile" + your name of tag.
+        $args = $this->getArgs($expression); // it separates the values of the tags
+        $result = ['', '', '', '']; // inner, between, pre, post
+        // your custom code here
+        return $this->render($args, 'mynewtag', $result); // we should indicate to use our pattern.
+    }
 }
 ```
+
+Using a trait (recommended, why? It is because trait are more flexible)
+
+```php
+trait MyTrait {
+    protected function compileMyNewTag($expression) { // the method must be called "compile" + your name of tag.
+        $args = $this->getArgs($expression); // it separates the values of the tags
+        $result = ['', '', '', '']; // inner, between, pre, post
+        // your custom code here
+        return $this->render($args, 'mynewtag', $result); // we should indicate to use our pattern.
+    }
+}
+
+class MyClass extends  BladeOne {
+    use BladeOneHtml;
+    use MyTrait; // <-- our trait
+}
+```
+
+
 
 #### 3- Creating a new parent Method (container method)
 
@@ -655,7 +758,7 @@ protected function compileDatePicker($expression) {
     }    
     $this->addJs('<script src="js/jquery.js"></script>','jquery'); // our script needs jquery (if it is not loaded)
     $this->addCss('css/datepicker.css','datepicker'); 
-    $this->addjscode('$(.'.$args['id'].').datepicker();')
+    $this->addjscode('$(.'.$args['id'].').datepicker();');
     
     //unset($args['value']); // we could unset values that we don't want to be rendered.
     return $this->render($args, 'select', $result);
@@ -667,7 +770,12 @@ protected function compileDatePicker($expression) {
 
 
 ## Version history
-
+* 1.4 2020/05/02
+    * now it allows empty arguments. It requires BladeOne 3.43 or higher.  
+    * added unit test.
+* 1.3 2020/04/22
+    * added method useBootstrap3()
+    * added default class for textarea in useBootstrap4()
 * 1.2 2020/04/21  
     * tag @@alert()  
     * fixed: @@items() now it keeps the selection   
