@@ -772,7 +772,7 @@ protected function compileDatePicker($expression) {
 ## Version history
 
 * 1.5 2020/06/07
-    * Added a new optional argumento to processArgs() and render();
+    * Added a new optional argument to processArgs() and render();
     * Added unit test.
 * 1.4 2020/05/02
     * now it allows empty arguments. It requires BladeOne 3.43 or higher.  
