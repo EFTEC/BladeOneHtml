@@ -54,6 +54,11 @@ alert(2);</script>
 <link rel="stylesheet" href="style123">';
         $this->assertEqualsNR( $html,$this->myBlade->runString($template));
     }
+    
+    public function testPagination() {
+	    
+    }
+    
     public function testBasic1() {
         $this->assertEquals('abc:<input type="text" idname="hi" id="hi" name="hi" />'
             ,$this->myBlade->runString('@input(type="text" idname="hi" pre="abc:")'));

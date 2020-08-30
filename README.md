@@ -3,7 +3,7 @@ It is a PHP library that allows to create forms (view) easily, cleanly and witho
 
 This library works in two ways:
 
-* It compiles a script (our view that use our tags), in a native php code.
+* It compiles a script (our view that use our tags), in a native PHP code.
 * And the next read, if the script exists, then it uses it (instead of re-compiling). And since the script is native code, then it is exactly like to work in vanilla-php but it is way easy to write and to maintenance.
 
 
@@ -177,13 +177,15 @@ Example:
 @endselect
 ```
 
-> Note: items requires the arguments values and value (parent) and value and text (items)
+> Note 1: @items requires the arguments values in the parent (@select) and the arguments **value** (the selectable value) and **text** (the visible value)
+> Note 2: @items requires an **id**, assigned in the same tag or in the parent tag (in this case, the parent is @select)
+> Note 3: By standard, the argument **id** must be unique.
 
 ![](docs/select.jpg)
 
 ### item
 
-**@item** is an utilitary tag used inside other thags.  This behave depending on of their parent tag. It adds a simple 
+**@item** is an utility tag used inside other tags.  This behave depending on of their parent tag. It adds a simple 
 line/row to the parent object.
 
 Example:
@@ -393,6 +395,40 @@ It generates a sorted list
 
 ![](docs/ol.jpg)
 
+### pagination
+
+It generates a pagination. It requires bootstrap3 or bootstrap4.  
+
+You can find an example at [examples/examplepagination.php](examples/examplepagination.php)
+
+PHP code
+
+```php
+$current=isset($_GET['_page']) ? $_GET['_page'] : 1;
+echo $blade->run("examplepagination", 
+    ['totalpages'=>count($products)
+     ,'current'=>$current
+     ,'pagesize'=>10
+     ,'products'=>$items
+    ]);
+```
+
+Template
+
+```html
+@pagination(numpages=$totalpages current=$current  pagesize=$pagesize urlparam='_page')
+```
+
+> Note: The page is base 1.
+> Note: the argument urlparam is used to build the link (domain.dom/web.php?_page=999)
+
+You can change the name of the buttons **prev** and **next** as follow:
+
+```php
+$this->setTranslation(['pagination'=>['prev'=>'<&lt;>','next'=>'&gt;']]);
+```
+  
+
 ### table
 
 It renders a table
@@ -543,20 +579,22 @@ Where nametag could be as follow
 
 #### Pattern-Variables inside the code
 
-| variable    | explanation                                                  |
-| ----------- | ------------------------------------------------------------ |
-| {{pre}}     | The code before the tag : **pre** &lt;tag  >&lt;/tag&gt;     |
-| {{post}}    | The code after the tag : < tag  >&lt;/tag&gt; **post**       |
-| {{inner}}   | The attributes inside the tag : < tag **inside** > &lt;/tag&gt; |
-| {{between}} | The content between the tag : < tag >**between**&lt;/tag&gt; |
-| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > &lt;/tag&gt; |
-| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > &lt;/tag&gt; |
+| variable    | explanation                                                  | Escaped (*)                                                  |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| {{pre}}     | The code before the tag : **pre** &lt;tag  >&lt;/tag&gt;     | no                                                           |
+| {{post}}    | The code after the tag : < tag  >&lt;/tag&gt; **post**       | no                                                           |
+| {{inner}}   | The attributes inside the tag : < tag **inside** > &lt;/tag&gt; | yes                                                          |
+| {{between}} | The content between the tag : < tag >**between**&lt;/tag>    | By default this value is escaped <br />but it could be un-escaped |
+| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > &lt;/tag&gt; | yes                                                          |
+| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > &lt;/tag&gt; | yes                                                          |
 
 Example of a normal tag:
 
 ```php
 $blade->pattern['input']='{{pre}}<input{{inner}} >{{between}}</input>{{post}}';
 ```
+
+> Note :(*) What is escaped?. For example the text "<hello world>", if it escaped, it is displayed as "&amp;lt;hello&amp;gt;"
 
 #### Custom attribute
 
@@ -582,11 +620,31 @@ The library has a lit of methods that they could be used to initialize and confi
 
 ### useBootstrap4
 
+It sets the patterns and classes to be compatible with bootstrap 4. 
+
+if argument is true, then it adds the CSS to the **css box** from the CDN   
+
+Our code
+
 ```php
 $blade->useBootstrap4(true); 
 ```
 
+#### Note: If we want to use the css box, then we need to add to our view the next code
+
+```html
+<header>
+	@cssbox
+</header>
+```
+
+
+
 ### useBootstrap3
+
+It sets the patterns and classes to be compatible with bootstrap 3. 
+
+if argument is true, then it adds the CSS to the **css box** from the CDN   
 
 ```php
 $blade->useBootstrap3(true); 
@@ -594,17 +652,23 @@ $blade->useBootstrap3(true);
 
 ### addCss
 
+It adds a CSS to the **css box**
+
 ```php
 $this->addCss('css/datepicker.css','datepicker'); 
 ```
 
 ### addJS
 
+It adds a javascript link to the **js box**
+
 ```php
 $this->addJs('<script src="js/jquery.js"></script>','jquery');
 ```
 
 ### addJSCode
+
+It adds a a javascript code to the **js box**
 
 ```php
 $blade->addJsCode('alert("hello");');
@@ -771,6 +835,9 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 1.6 2020/08/30   
+    * Added tag @pagination       
+    * Added the method setTranslationControl() and getTranslationControl()      
 * 1.5 2020/06/07
     * Added a new optional argument to processArgs() and render();
     * Added unit test.

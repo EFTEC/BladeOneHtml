@@ -23,12 +23,14 @@ namespace eftec\bladeonehtml;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.5 2020-06-07
+ * @version  1.6 2020-08-30
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
 trait BladeOneHtml
 {
+    /** @var string=['vanilla','bootstrap3','bootstrap4','material'][$i] It sets the current style  */
+    public $style='vanilla';
     /** @var string[] It stores the list of patterns used by the code */
     public $pattern
         = [
@@ -74,7 +76,8 @@ trait BladeOneHtml
             'head'            => '<th {{inner}} >{{between}}</th>{{post}}',
             'label'           => '{{pre}}<label {{inner}} >{{between}}</label>{{post}}',
             'image'           => '{{pre}}<img {{inner}} >{{between}}</img>{{post}}',
-            'alert'           => '{{pre}}<div {{inner}}>{{between}}</div>{{post}}'
+            'alert'           => '{{pre}}<div {{inner}}>{{between}}</div>{{post}}',
+            'pagination'      => '{{pre}}{{between}}{{post}}'
         ];
     /** @var string[] The class is added to the current element */
     public $defaultClass = [];
@@ -86,6 +89,8 @@ trait BladeOneHtml
     protected $htmlItem = [];
     protected $htmlCurrentId = [];
     protected $insideForm = false;
+
+    private $translationControl=['pagination'=>['prev'=>'Previous','next'=>'Next']];
 
     /**
      * It is the automatic constructor. It is loaded by BladeOne.
@@ -100,6 +105,7 @@ trait BladeOneHtml
     public function useBootstrap3($useCDN = false)
     {
         // Amazing but it still highly used and it works fine.
+        $this->style='bootstrap3';
         $bs3 = [
             'button'   => 'btn',
             'input'    => 'form-control',
@@ -128,9 +134,10 @@ trait BladeOneHtml
                 . 'crossorigin="anonymous"></script>', 'bootstrap');
         }
     }
-
+    
     public function useBootstrap4($useCDN = false)
     {
+        $this->style='bootstrap4';
         $bs4 = [
             'button'        => 'btn',
             'input'         => 'form-control',
@@ -178,11 +185,61 @@ trait BladeOneHtml
                 . 'crossorigin="anonymous"></script>', 'bootstrap');
         }
     }
-
+    
     //</editor-fold>
 
     /**
-     * It adds a css to the css box.
+     * Used for pagination
+     * @param $newArg
+     *
+     * @return string
+     */
+    public function addArgUrl($newArg) {
+        $get=array_merge($_GET,$newArg);
+        return $this->getCurrentUrl(true).'?'.http_build_query($get);
+    }   
+    
+
+
+    /**
+     * @return array
+     */
+    public function getTranslationControl()
+    {
+        return $this->translationControl;
+    }
+
+    /**
+     * It merge a new translation<br>
+     * Currently, only the tag <b>@ pagination</b> supports translation.<br>
+     * <b>Example:</b><br>
+     * <pre>
+     * $this->setTranslation(['pagination'=>['prev'=>'<&lt;>','next'=>'&gt;']]);
+     * </pre>
+     * 
+     * @param array $translationControl
+     *
+     * @return $this
+     */
+    public function setTranslationControl($translationControl)
+    {
+        foreach($translationControl as $k=>$v) {
+            $this->translationControl[$k]=$v; // add or replace    
+        }         
+        return $this;
+    }
+ 
+    
+    /**
+     * It adds a css to the css box. It could be added the link tag, the full url or the relative url.<br>
+     * The name is used to avoid to repeat the same style. If a style exists, then it is not added<br>
+     * <b>example:</b><br>
+     * <pre>
+     * $this->addCss('<link href='...'>','bootstrap'); // <link href='...'>
+     * $this->addCss('<link href='...'>','bootstrap'); // it is not added (bootstrap already exists)
+     * $this->addCss('https://domain.dom/css.css'); // <link href='https://domain.dom/css.css'>
+     * $this->addCss('css/css.css'); // <link href='https://domain.dom/css/css.css'> (it uses $baseurl)
+     * </pre>        
      *
      * @param string $css  It could be a url or a link tag.
      * @param string $name if name is empty then it is added. The name avoid to add duplicates
@@ -190,6 +247,9 @@ trait BladeOneHtml
     public function addCss($css, $name = '')
     {
         if (strpos($css, '<link') === false) {
+            if(strpos($css,'//')===false) {
+                $css='<?php echo $this->baseUrl.\'/'.$css.'\'; ?>';
+            }
             $css = '<link rel="stylesheet" href="' . $css . '">';
         }
         if ($name && !isset($this->htmlCss[$name])) {
@@ -200,13 +260,28 @@ trait BladeOneHtml
     }
 
     /**
-     * It adds a js to js box.
+     * It adds a js to the js box. It could be added the script tag, the full url or the relative url.<br>
+     * The name is used to avoid to repeat the same script. If a script exists, then it is not added<br>
+     * <b>example:</b><br>
+     * <pre>
+     * $this->addJs('<script src='... ','jquery'); // <script src='...'>
+     * $this->addJs('<script src='... ','jquery'); // it is not added (jquery already exists)
+     * $this->addJs('https://domain.dom/js.js'); // <script src='https://domain.dom/js.js'>
+     * $this->addJs('js/js.js'); // <script src='https://domain.dom/js/js.js'> (it uses $baseurl)
+     * </pre>
      *
      * @param string $js   It must be a link to a javscript
      * @param string $name if name is empty then it is added. The name avoid to add duplicates
      */
     public function addJs($js, $name = '')
     {
+        if (strpos($js, '<script') === false) {
+            if(strpos($js,'//')===false) {
+                $js='<?php echo $this->baseUrl.\'/'.$js.'\'; ?>';
+            }
+            $js = '<script type="application/javascript" src="' . $js . '"></script>';
+        }
+        
         if ($name) {
             if (!isset($this->htmlJs[$name])) {
                 $this->htmlJs[$name] = $js;    
@@ -313,7 +388,74 @@ trait BladeOneHtml
 
     //<editor-fold desc="compile function">
 
-
+    /**
+     * This controls only works for type=bootstrap4<br>
+     * <b>Example:</b><br>
+     * <pre>
+     * @pagination(numpages=999 current=50  pagesize=5 urlparam='_page')
+     * </pre>
+     * @param $expression
+     *
+     * @return string|string[]
+     */
+    protected function compilePagination($expression) {
+        if($this->style!=='bootstrap4' && $this->style!=='bootstrap3') {
+            $this->showError('@pagination', '@pagination: it only works with bootstrap3 or 4 ('.$this->style.'). You must 
+            use useBootstrap3() or useBootstrap4()', true);
+            return '';
+        }
+        $args = $this->getArgs($expression);
+        if(!isset($args['numpages'], $args['current'])) {
+            $this->showError('@pagination', '@pagination: Missing numpages or current arguments', true);
+            return '';
+        }
+        $_urlparam = @$args['urlparam'];
+        $_urlparam = isset($_urlparam) ? $_urlparam : "'_page'";
+        $_numpages = $args['numpages'];
+        unset($args['numpages']);
+        $_current=$args['current'];
+        unset($args['current']);
+        $_pagesize =$args['pagesize'];
+        $_pagesize= isset($_pagesize) ? $_pagesize : 5;
+        unset($args['pagesize']);
+        
+        $r='<?php // pagination starts ici *********************************************
+        $_half=floor(('.$_pagesize.'-1)/2); $_p0='.$_current.'-$_half; $_p1='.$_current.'+$_half;
+        if($_p0<1) { $_p1 +=1-$_p0; $_p0=1; }
+        if($_p1>'.$_numpages.') { $_p1='.$_numpages.'; }
+        echo \'<ul class="pagination">\';
+        if('.$_current.' >1) {
+            $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_current.'-1]);
+            echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
+            .$this->translationControl['pagination']['prev'].'</a></li>\';
+        } else {
+            echo \'<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">'
+            .$this->translationControl['pagination']['prev'].'</a></li>\';
+        }
+        for($_pag=$_p0;$_pag<=$_p1;$_pag++) {
+            $_url=$this->addArgUrl(['.$_urlparam.'=>$_pag]);
+            if($_pag == '.$_current.') {
+                echo \'<li class="page-item active"><a class="page-link" href="#">\'.$_pag.\'</a></li>\';
+            } else {
+                echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'">\'.$_pag.\'</a></li>\';    
+            }                
+        } 
+        if('.$_current.' <'.$_numpages.') {
+            $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_current.'+1]);
+            echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'">'
+            .$this->translationControl['pagination']['next'].'</a></li>\';
+        } else {
+            echo \'<li class="page-item disabled"><a class="page-link" href="#">'
+            .$this->translationControl['pagination']['next'].'</a></li>\';
+        }
+        echo \'</ul>\';
+        // pagination ends *********************************************
+        ?>';
+        
+        $result = ['', $r, '', '']; // inner, between, pre, post
+        return $this->render($args, 'pagination', $result);
+    }
+    
     protected function compileCssBox()
     {
         return implode("\n", $this->htmlCss);
@@ -491,8 +633,8 @@ trait BladeOneHtml
     {
         $args = $this->getArgs($expression);
 
-        $args['between'] = $this->stripQuotes(@$args['value']);
-        unset($args['value']);
+        $args['between'] = $this->stripQuotes(@$args['text']);
+        unset($args['text']);
 
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'button', $result);
