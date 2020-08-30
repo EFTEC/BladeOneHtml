@@ -428,6 +428,7 @@ You can change the name of the buttons **prev** and **next** as follow:
 $this->setTranslation(['pagination'=>['prev'=>'<&lt;>','next'=>'&gt;']]);
 ```
   
+![](docs/pagination.jpg)  
 
 ### table
 
