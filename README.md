@@ -793,7 +793,7 @@ $this->pattern['mynewtag_end']='</mycustomtag>';
 ```php
 protected function compileEndNewTag() {
     $parent = @\array_pop($this->htmlItem); // remove the element from the stack
-    if (\is_null($parent) || $parent['type']!='newtag') { // if no element in the stack or it's a wrong one then error
+    if (\is_null($parent) || $parent['type']!=='newtag') { // if no element in the stack or it's a wrong one then error
         $this->showError("@endnewtag", "Missing @initial tag", true);
     }
     // our code
@@ -836,6 +836,8 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 1.6.1 2020/08/31    
+    * Pagination now it has "first" and "last" buttons.
 * 1.6 2020/08/30   
     * Added tag @pagination       
     * Added the method setTranslationControl() and getTranslationControl()      

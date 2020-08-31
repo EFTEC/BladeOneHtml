@@ -21,7 +21,7 @@ $blade->setMode(BladeOne::MODE_DEBUG); // for debug, remove in productive.
 $myvalue=@$_REQUEST['myform'];
 
 $products=[];
-for($i=0;$i<1000;$i++) {
+for($i=0;$i<45;$i++) {
     $products[]='Cocacola #'.$i;
 }
 
@@ -35,7 +35,7 @@ $items=array_slice($products,($current-1)*10,10);
 
 
 echo $blade->run("examplepagination", 
-    ['totalpages'=>count($products)
+    ['totalpages'=>ceil(count($products)/10)
      ,'current'=>$current
      ,'pagesize'=>10
      ,'products'=>$items

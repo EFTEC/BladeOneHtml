@@ -23,7 +23,7 @@ namespace eftec\bladeonehtml;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.6 2020-08-30
+ * @version  1.6.1 2020-08-31
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -90,7 +90,7 @@ trait BladeOneHtml
     protected $htmlCurrentId = [];
     protected $insideForm = false;
 
-    private $translationControl=['pagination'=>['prev'=>'Previous','next'=>'Next']];
+    private $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
 
     /**
      * It is the automatic constructor. It is loaded by BladeOne.
@@ -214,7 +214,7 @@ trait BladeOneHtml
      * Currently, only the tag <b>@ pagination</b> supports translation.<br>
      * <b>Example:</b><br>
      * <pre>
-     * $this->setTranslation(['pagination'=>['prev'=>'<&lt;>','next'=>'&gt;']]);
+     * $this->setTranslation(['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']]);
      * </pre>
      * 
      * @param array $translationControl
@@ -409,8 +409,8 @@ trait BladeOneHtml
             $this->showError('@pagination', '@pagination: Missing numpages or current arguments', true);
             return '';
         }
-        $_urlparam = @$args['urlparam'];
-        $_urlparam = isset($_urlparam) ? $_urlparam : "'_page'";
+        $_urlparam = isset($args['urlparam'])? $args['urlparam'] :  "'_page'"; // if not urlparam the we use _page as default
+        //unset($args['urlparam'])
         $_numpages = $args['numpages'];
         unset($args['numpages']);
         $_current=$args['current'];
@@ -424,6 +424,9 @@ trait BladeOneHtml
         if($_p0<1) { $_p1 +=1-$_p0; $_p0=1; }
         if($_p1>'.$_numpages.') { $_p1='.$_numpages.'; }
         echo \'<ul class="pagination">\';
+        $_url=$this->addArgUrl(['.$_urlparam.'=>1]);
+        echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
+        .$this->translationControl['pagination']['first'].'</a></li>\';
         if('.$_current.' >1) {
             $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_current.'-1]);
             echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
@@ -435,7 +438,7 @@ trait BladeOneHtml
         for($_pag=$_p0;$_pag<=$_p1;$_pag++) {
             $_url=$this->addArgUrl(['.$_urlparam.'=>$_pag]);
             if($_pag == '.$_current.') {
-                echo \'<li class="page-item active"><a class="page-link" href="#">\'.$_pag.\'</a></li>\';
+                echo \'<li class="page-item active"><span class="page-link">\'.$_pag.\'</span></li>\';
             } else {
                 echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'">\'.$_pag.\'</a></li>\';    
             }                
@@ -448,6 +451,9 @@ trait BladeOneHtml
             echo \'<li class="page-item disabled"><a class="page-link" href="#">'
             .$this->translationControl['pagination']['next'].'</a></li>\';
         }
+        $_url=$this->addArgUrl(['.$_urlparam.'=>$_p1]);
+        echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
+            .$this->translationControl['pagination']['last'].'</a></li>\';
         echo \'</ul>\';
         // pagination ends *********************************************
         ?>';
