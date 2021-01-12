@@ -23,7 +23,7 @@ namespace eftec\bladeonehtml;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.6.1 2020-08-31
+ * @version  1.7
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -356,19 +356,19 @@ trait BladeOneHtml
             $args['id'] = $args['idname'];
             $args['name'] = $args['idname'];
         }
-        if (isset($args['between'])) {
+        if (array_key_exists('between',$args)) {
             $result[1] .= $this->wrapPHP($this->stripQuotes($args['between']), '', $escapeBetween);
             unset($args['between']);
         }
-        if (isset($args['pre'])) {
+        if (array_key_exists('pre',$args)) {
             $result[2] .= $this->wrapPHP($this->stripQuotes($args['pre']), '', false);
             unset($args['pre']);
         }
-        if (isset($args['post'])) {
+        if (array_key_exists('post',$args)) {
             $result[3] .= $this->wrapPHP($this->stripQuotes($args['post']), '', false);
             unset($args['post']);
         }
-        if (isset($args['text'])) {
+        if (array_key_exists('text',$args)) {
             $result[1] .= $this->wrapPHP($this->stripQuotes($args['text']), '');
             unset($args['text']);
         }

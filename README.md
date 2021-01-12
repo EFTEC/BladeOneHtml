@@ -837,6 +837,10 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 1.7 2021/01/12
+    * @button now considers value as the value of argument while text the visual content.  
+    * It also uses in_array instead of isset.
+    * Compatible with PHP 8.x
 * 1.6.1 2020/08/31    
     * Pagination now it has "first" and "last" buttons.
 * 1.6 2020/08/30   

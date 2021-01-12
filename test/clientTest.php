@@ -28,7 +28,7 @@ class clientTest extends TestCase
 	function assertEqualsNR($expected,$v) {
 	    $expected=str_replace(["\r\n","\n"],["",""],$expected);
         $v=str_replace(["\r\n","\n"],["",""],$v);
-        $this->assertEquals($expected,$v);
+        self::assertEquals($expected,$v);
     }
 
 
@@ -51,7 +51,7 @@ class clientTest extends TestCase
 <script>
 alert(2);</script>
 
-<link rel="stylesheet" href="style123">';
+<link rel="stylesheet" href="./style123">';
         $this->assertEqualsNR( $html,$this->myBlade->runString($template));
     }
     
@@ -60,17 +60,17 @@ alert(2);</script>
     }
     
     public function testBasic1() {
-        $this->assertEquals('abc:<input type="text" idname="hi" id="hi" name="hi" />'
+        self::assertEquals('abc:<input type="text" idname="hi" id="hi" name="hi" />'
             ,$this->myBlade->runString('@input(type="text" idname="hi" pre="abc:")'));
-		$this->assertEquals('<input type="text" />'
+		self::assertEquals('<input type="text" />'
             ,$this->myBlade->runString('@input(type="text")'));
-        $this->assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" />'
+        self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
     public function testCheckbox() {
 	    $template='@checkbox(id="idsimple" value="1" checked="1" post="it is a selection")';
 	    $html='<input type="checkbox"  id="idsimple" value="1" checked ></input>it is a selection';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
 
         $template='@checkboxes(id="checkbox1" value=$selection alias=$country)
 @item(id="aa1" value=\'aaa\' text=\'hello world\' post="<br>")
@@ -82,12 +82,12 @@ alert(2);</script>
 <input type="checkbox" id="aa2" value=\'aaa\' name idname >hello world2</input><br>
 
 </div>';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testRadio() {
         $template='@radio(id="idsimple" value="1" checked="1" post="it is a selection")';
         $html='<input type="radio"  id="idsimple" value="1" checked ></input>it is a selection';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
         
         $template='@radios(id="radios1" name="aaa" value=$selection  alias=$country)
 @item(value=\'aaa\' text=\'hello world\' post="<br>")
@@ -99,7 +99,7 @@ alert(2);</script>
 <input type="radio" value=\'aaa\' id="radios1" name="aaa" idname >hello world2</input><br>
 
 </div>';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testMisc() {
         $template='@ul(id="aaa" value=$selection values=$countries alias=$country)
@@ -118,12 +118,12 @@ alert(2);</script>
 <label  for="id1" >hello world:</label>
 <input name="id1" value="hello world" type=hidden />
 <div  class="alert-danger" customtag="it is a custom tag">hi there</div><br>';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testTextArea() {
         $template='@textarea(id="aaa" value="3333 3333 aaa3333 ")';
         $html='<textarea  id="aaa" >3333 3333 aaa3333 </textarea>';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testTable() {
         $template='@table(class="table" values=$countries alias=$country border="1")
@@ -154,13 +154,13 @@ alert(2);</script>
 <td  colspan="3" >id</td>
 </tr></tfoot>
 </table>';
-        $this->assertEquals($html,$this->myBlade->runString($template));	    
+        self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testButton() {
         $template='<body>
 @form()
 @input(type="text" name="myform" value=$myvalue)
-@button(type="submit" value="Send")
+@button(type="submit" text="Send")
 @link(href="https://www.google.cl" text="context")
 @endform()
 </body>';
@@ -171,11 +171,11 @@ alert(2);</script>
 <a href="https://www.google.cl" >context</a>
 </form>
 </body>';
-        $this->assertEquals($html,$this->myBlade->runString($template));
+        self::assertEquals($html,$this->myBlade->runString($template));
     }
     
     public function testNewVarSelect() {
-        $this->assertEquals('<select id="aaa" value="" >
+        self::assertEquals('<select id="aaa" value="" >
             <option value=\'aaa\' id="aaa" name idname >hello world</option>
 <option value=\'aaa\' id="aaa" name idname >hello world</option>
 <option value=\'aaa\' id="aaa" name idname >hello world</option>
@@ -193,17 +193,17 @@ alert(2);</script>
     public function testNewVar3() {
 	    $this->myBlade->useBootstrap3();
         $this->myBlade->useBootstrap3(true);
-        $this->assertEquals('<input type="text" class="form-control" />'
+        self::assertEquals('<input type="text" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text")'));
-        $this->assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
+        self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
     public function testNewVar4() {
         $this->myBlade->useBootstrap4();
         $this->myBlade->useBootstrap4(true);
-        $this->assertEquals('<input type="text" class="form-control" />'
+        self::assertEquals('<input type="text" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text")'));
-        $this->assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
+        self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
 	
