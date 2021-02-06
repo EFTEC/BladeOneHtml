@@ -83,6 +83,7 @@ trait BladeOneHtml
     public $defaultClass = [];
     /** @var array It adds a custom adds that it could be used together with $this->pattern */
     public $customAttr = [];
+    public $counterId=0;
     protected $htmlCss = []; // indicates the type of the current tag. such as select/selectgroup/etc.
     protected $htmlJs = []; //indicates the id of the current tag.
     protected $htmlJsCode = [];
@@ -171,18 +172,20 @@ trait BladeOneHtml
         $this->pattern['radios_item'] = $this->pattern['radio'];
 
         if ($useCDN) {
-            $this->addCss('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com'
-                . '/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98'
-                . '/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">', 'bootstrap');
-            $this->addJs('<script src="https://code.jquery.com/jquery-3.5.0.min.js" '
-                . 'integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" '
-                . 'crossorigin="anonymous"></script>', 'jquery');
-            $this->addJs('<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" '
-                . 'integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" '
-                . 'crossorigin="anonymous"></script>', 'popper');
-            $this->addJs('<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" '
-                . 'integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" '
-                . 'crossorigin="anonymous"></script>', 'bootstrap');
+            $this->addCss('<link rel="stylesheet" 
+                    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" 
+                    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" 
+                    crossorigin="anonymous">', 'bootstrap');
+            $this->addJs('<script
+                  src="https://code.jquery.com/jquery-3.5.1.min.js"
+                  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+                  crossorigin="anonymous"></script>', 'jquery');
+            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
+                    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" 
+                    crossorigin="anonymous"></script>', 'popper');
+            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" 
+                        integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" 
+                        crossorigin="anonymous"></script>', 'bootstrap');
         }
     }
     
@@ -536,11 +539,23 @@ trait BladeOneHtml
             $args['name'] = $parent['name'];
         }
         if (!isset($args['idname'])) {
-            $args['idname'] = $parent['idname'];
+            $this->counterId++;
+            if (isset($args['id'])) {
+                $args['idname'] =$args['id'];
+            } else {
+                $args['idname'] = isset($parent['idname'])?$parent['idname']:null; //'_idname'.$this->counterId;
+            }
+
         }
+        $checkedname = ($parent['type'] === 'select') ? 'selected' : 'checked';
+
+        $args['checked'] = '{{checked}}'; //<?php if(1==1)?"checked":""; >';
 
         $result = ['', '', '', '']; // inner, between, pre, post
-        return $this->render($args, $parent['type'] . '_item', $result);
+        $htmlItem= $this->render($args, $parent['type'] . '_item', $result);
+        $htmlItem = str_replace('{{checked}}',
+            '<?php echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
+        return $htmlItem;
     }
 
     protected function compileItems($expression)
@@ -556,7 +571,7 @@ trait BladeOneHtml
             $args['name'] = @$parent['name'];
         }
         if (!isset($args['idname']) && isset($parent['idname'])) {
-            $args['idname'] = @$parent['idname'];
+            $args['idname'] = isset($parent['idname'])?$parent['idname']:null;
         }
         if (!isset($args['alias'])) {
             $args['alias'] = @$parent['alias'];

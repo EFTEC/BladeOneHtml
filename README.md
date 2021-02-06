@@ -48,7 +48,7 @@ echo $blade->run("exampleview", ['myvalue'=>$myvalue]);
 3. Create a folders called  📁 "\views" and 📁 "\compiles"
 4. Inside views, creates the next file 📄  "\views\exampleview.blade.php"
 
-```php
+```html
 <body>
     @form()
         @input(type="text" name="myform" value=$myvalue)
@@ -728,6 +728,9 @@ You could create a new PHP class or trait and extend our class. Inside this new 
 Using a new class
 
 ```php
+use eftec\bladeone\BladeOne;
+use eftec\bladeonehtml\BladeOneHtml;
+
 class MyBlade extends  BladeOne {
     use BladeOneHtml;
 }
@@ -769,13 +772,11 @@ For creating a parent method, you must push a new value inside $this->htmlItem. 
 $this->pattern['mynewtag']='<mycustomtag {{inner}}>{{between}}';
 ```
 
-
-
 ```php
 protected function compileMyNewTag($expression) {
 	$args = $this->getArgs($expression); // it loads and separates the arguments.
-    \array_push($this->htmlItem, ['type' => 'mynewtag','value' => @$args['value']
-    ]);
+    $this->htmlItem[] = ['type' => 'mynewtag','value' => @$args['value']
+    ];
     $result = ['', '', '', '']; // inner, between, pre, post
     //unset($args['value']); // we could unset values that we don't want to be rendered.
     return $this->render($args, 'select', $result);
@@ -837,6 +838,10 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 1.7.1 2021/02/06
+    * @item now marks the value "checked" or "selected" if the values is equals to the curent value of the parent object
+    * Bootstrap 4 CDN now it uses the version 4.6    
+    * for @item and @items, the field name and idname are created automatically. If id is set, then it uses it.
 * 1.7 2021/01/12
     * @button now considers value as the value of argument while text the visual content.  
     * It also uses in_array instead of isset.
