@@ -23,7 +23,7 @@ namespace eftec\bladeonehtml;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.7
+ * @version  1.7.1
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
