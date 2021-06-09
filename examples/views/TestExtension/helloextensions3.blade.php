@@ -41,7 +41,7 @@
     @items(values=$countries value='id' text='name')
 @endselect
 <hr>
-
+@checkbox(id="idsimple" value="1" checked="1" post="it is a selection")<br>
 @checkbox(id="idsimple" value="1" checked=1 post="it is a selection constant, it must be checked")<br>
 @checkbox(id="idsimple" value="1" post="it is a selection no constant, it must not be checked")<br>
 @checkbox(id="idsimple" value="1" checked=$true post="it is a selection, it must be checked")<br>

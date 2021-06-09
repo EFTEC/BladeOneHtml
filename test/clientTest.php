@@ -5,6 +5,7 @@ namespace eftec\tests;
 use eftec\bladeone\BladeOne;
 
 use eftec\bladeonehtml\BladeOneHtml;
+use eftec\MessageContainer;
 use PHPUnit\Framework\TestCase;
 
 class myBlade extends  BladeOne {
@@ -78,8 +79,8 @@ alert(2);</script>
 @items(values=$countries value=\'id\' text=\'name\' post="<br>")
 @endcheckboxes';
         $html='<div id="checkbox1" value="" >
-<input type="checkbox" id="aa1" value=\'aaa\' name="aa1" idname="aa1"  >hello world</input><br>
-<input type="checkbox" id="aa2" value=\'aaa\' name="aa2" idname="aa2"  >hello world2</input><br>
+<input type="checkbox" id="aa1" value=\'aaa\' name="aa1" idname="aa1" >hello world</input><br>
+<input type="checkbox" id="aa2" value=\'aaa\' name="aa2" idname="aa2" >hello world2</input><br>
 
 </div>';
         self::assertEquals($html,$this->myBlade->runString($template));
@@ -95,8 +96,8 @@ alert(2);</script>
 @items(values=$countries value=\'id\' text=\'name\' post="<br>")
 @endradios';
         $html='<div id="radios1" name="aaa" value=""  >
-<input type="radio" value=\'aaa\' id="radios1" name="radios1" idname="radios1"  >hello world</input><br>
-<input type="radio" value=\'aaa\' id="radios1" name="radios1" idname="radios1"  >hello world2</input><br>
+<input type="radio" value=\'aaa\' id="radios1" name="radios1" idname="radios1" >hello world</input><br>
+<input type="radio" value=\'aaa\' id="radios1" name="radios1" idname="radios1" >hello world2</input><br>
 
 </div>';
         self::assertEquals($html,$this->myBlade->runString($template));
@@ -111,7 +112,7 @@ alert(2);</script>
 @hidden(name="id1" value="hello world$somevar" )
 @alert(text="hi there" class="alert-danger" customtag="it is a custom tag")<br>';
         $html='<ul id="aaa" value="" >
-<li value=\'aaa\' id="aaa" name="aaa" idname="aaa"  >hello world</li>
+<li value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</li>
 
 </ul>
 <img  src="https://via.placeholder.com/350x150" ></img>
@@ -176,9 +177,9 @@ alert(2);</script>
     
     public function testNewVarSelect() {
         self::assertEquals('<select id="aaa" value="" >
-            <option value=\'aaa\' id="aaa" name="aaa" idname="aaa"  >hello world</option>
-<option value=\'aaa\' id="aaa" name="aaa" idname="aaa"  >hello world</option>
-<option value=\'aaa\' id="aaa" name="aaa" idname="aaa"  >hello world</option>
+            <option value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</option>
+<option value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</option>
+<option value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</option>
 
 </select>
 '
@@ -205,6 +206,23 @@ alert(2);</script>
             ,$this->myBlade->runString('@input(type="text")'));
         self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
+    }
+    public function testtc() {
+	    $pagarray=array('pagination'=>array(        'first' => 'First',
+            'prev' => 'Previous',
+            'next' => 'Next',
+            'last' => 'Last'));
+	    self::assertEquals($pagarray,$this->myBlade->getTranslationControl());
+        $this->myBlade->setTranslationControl($pagarray);
+        self::assertEquals($pagarray,$this->myBlade->getTranslationControl());
+
+
+    }
+    public function testmsg() {
+	    $mc=new MessageContainer();
+	    $mc->addItem('msg1','there is an error');
+	    $this->myBlade->message($mc);
+	    self::assertEquals("<span default='' >there is an error</span>",$this->myBlade->runString("@message(id='msg1' level='error' default='')"));
     }
 	
 }

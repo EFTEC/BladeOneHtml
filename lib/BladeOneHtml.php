@@ -1,12 +1,12 @@
 <?php
-/** @noinspection UnknownInspectionInspection */
+/** @noinspection UnknownInspectionInspection
+ * @noinspection RequiredAttributes
+ * @noinspection HtmlRequiredAltAttribute
+ * @noinspection HtmlUnknownAttribute
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ */
 
-/** @noinspection RequiredAttributes */
-/** @noinspection HtmlRequiredAltAttribute */
-/** @noinspection HtmlUnknownAttribute */
-/** @noinspection PhpFullyQualifiedNameUsageInspection */
 
-/** @noinspection PhpUnused */
 
 namespace eftec\bladeonehtml;
 
@@ -94,17 +94,16 @@ trait BladeOneHtml
     protected $htmlJs = []; //indicates the id of the current tag.
     protected $htmlJsCode = [];
     protected $htmlItem = [];
-    protected $htmlCurrentId = [];
     protected $insideForm = false;
 
     private $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
 
     /**
      * It is the automatic constructor. It is loaded by BladeOne.
+     * @noinspection PhpUnused
      */
     public function BladeOneHtml()
     {
-        //echo 'loading this';
     }
 
     /** @var MessageContainer */
@@ -251,6 +250,7 @@ trait BladeOneHtml
      * @param $newArg
      *
      * @return string
+     * @noinspection PhpUnused
      */
     public function addArgUrl($newArg) {
         $get=array_merge($_GET,$newArg);
@@ -335,7 +335,7 @@ trait BladeOneHtml
     {
         if (strpos($js, '<script') === false) {
             if(strpos($js,'//')===false) {
-                $js=$this->phpTag.' echo $this->baseUrl.\'/'.$js.'\'; ?>';
+                $js='<?php echo $this->baseUrl.\'/'.$js.'\'; ?>';
             }
             $js = '<script type="application/javascript" src="' . $js . '"></script>';
         }
@@ -523,17 +523,20 @@ trait BladeOneHtml
         $result = ['', $r, '', '']; // inner, between, pre, post
         return $this->render($args, 'pagination', $result);
     }
-    
+
+    /** @noinspection PhpUnused */
     protected function compileCssBox()
     {
         return implode("\n", $this->htmlCss);
     }
 
+    /** @noinspection PhpUnused */
     protected function compileJsBox()
     {
         return implode("\n", $this->htmlJs);
     }
 
+    /** @noinspection PhpUnused */
     protected function compilejsCodeBox($expression)
     {
         $args = $this->getArgs($expression);
@@ -550,6 +553,7 @@ trait BladeOneHtml
         return $js;
     }
 
+    /** @noinspection PhpUnused */
     protected function compileInput($expression)
     {
         $args = $this->getArgs($expression);
@@ -577,6 +581,7 @@ trait BladeOneHtml
         return $this->render($args, 'select', $result);
     }
 
+    /** @noinspection PhpUnused */
     protected function compileEndSelect()
     {
         $parent = @\array_pop($this->htmlItem);
@@ -586,6 +591,7 @@ trait BladeOneHtml
         return $this->pattern[$parent['type'] . '_end'];
     }
 
+    /** @noinspection PhpUnused */
     protected function compileItem($expression)
     {
         // we add a new attribute with the type of the current open tag
@@ -616,6 +622,7 @@ trait BladeOneHtml
             $this->phpTag.' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
     }
 
+    /** @noinspection PhpUnused */
     protected function compileItems($expression)
     {
         // we add a new attribute with the type of the current open tag
@@ -670,15 +677,14 @@ trait BladeOneHtml
                     : '';
             }
             $id=isset($args['id'])?$args['id']:'false';
-            $nameOG="\$_msgs=@{$id}? \$this->message()->get({$id})->all($level) 
+            $nameOG="\$_msgs=@$id? \$this->message()->get($id)->all($level) 
             : \$this->message()->allArray($level) ;\n \$_tmp";
             $name='$_msgs';
-            $nameKey='$_msgk';
         } else {
             $nameOG = $args['alias'] . 'Optgroup';
             $name = $args['values'];
-            $nameKey='$_msgk';
         }
+        $nameKey='$_msgk';
 
 
         $html
@@ -695,12 +701,10 @@ trait BladeOneHtml
 
         if ($parent['type'] === 'select') {
             $checkedname = 'selected';
+        } else if ($parent['type'] === 'messages') {
+            $checkedname = 'x';
         } else {
-            if ($parent['type'] === 'messages') {
-                $checkedname = 'x';
-            } else {
-                $checkedname = 'checked';
-            }
+            $checkedname = 'checked';
         }
 
         if($parent['type']!=='messages') {
@@ -717,6 +721,7 @@ trait BladeOneHtml
     }
 
 
+    /** @noinspection PhpUnused */
     protected function compileTextArea($expression)
     {
         $args = $this->getArgs($expression);
@@ -739,25 +744,27 @@ trait BladeOneHtml
         if(isset($args['checked'])) {
             if(!$this->isVariablePHP($args['checked'])) {
                 // constant or some fixed value
-                $args['checked'] = $this->stripQuotes($args['checked']) ? 'checked' : '';
+                $args['checked'] = $this->stripQuotes($args['checked']) ? ' checked' : '';
             } else {
                 // variable
-                $args['checked']=$this->wrapPHP($args['checked']."?'checked':''",'',false);
+                $args['checked']=$this->wrapPHP($args['checked']."?' checked':''",'',false);
             }
         }
         return $this->render($args, $type, $result);
     }
+
+    /** @noinspection PhpUnused */
     protected function compileCheckbox($expression)
     {
-        $this->renderCheckBoxRadio($expression,'radio');
+       return  $this->renderCheckBoxRadio($expression,'checkbox');
 
     }
-
+    /** @noinspection PhpUnused */
     protected function compileRadio($expression)
     {
-        $this->renderCheckBoxRadio($expression,'checkbox');
+        return $this->renderCheckBoxRadio($expression,'radio');
     }
-
+    /** @noinspection PhpUnused */
     protected function compileButton($expression)
     {
         $args = $this->getArgs($expression);
@@ -768,14 +775,14 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'button', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileLink($expression)
     {
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'link', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileCheckboxes($expression)
     {
         $args = $this->getArgs($expression);
@@ -784,7 +791,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'checkboxes', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndCheckboxes()
     {
         $parent = @\array_pop($this->htmlItem);
@@ -793,7 +800,7 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileRadios($expression)
     {
         $args = $this->getArgs($expression);
@@ -802,7 +809,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'radios', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndRadios()
     {
         $parent = @\array_pop($this->htmlItem);
@@ -811,7 +818,7 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileUl($expression)
     {
         $args = $this->getArgs($expression);
@@ -820,7 +827,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'ul', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndUl()
     {
         $parent = @\array_pop($this->htmlItem);
@@ -840,7 +847,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'messages', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndMessages()
     {
         $parent = @\array_pop($this->htmlItem);
@@ -849,7 +856,7 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileOl($expression)
     {
         $args = $this->getArgs($expression);
@@ -858,7 +865,9 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'ol', $result);
     }
-    protected function constructorItem($type,&$args) {
+
+    /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
+    protected function constructorItem($type, &$args) {
         return [
             'type'   => $type,
             'value'  => isset($args['value'])?$args['value']:null,
@@ -869,7 +878,7 @@ trait BladeOneHtml
             'idname' => isset($args['idname'])?$args['idname']:null,
         ];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndOl()
     {
         $parent = @\array_pop($this->htmlItem);
@@ -878,7 +887,7 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileForm($expression)
     {
         $this->insideForm = true;
@@ -886,7 +895,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'form', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndForm()
     {
         if (!$this->insideForm) {
@@ -894,19 +903,19 @@ trait BladeOneHtml
         }
         return $this->pattern['form_end'];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileOptGroup($expression)
     {
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'optgroup', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndOptGroup()
     {
         return $this->pattern['optgroup_end'];
     }
-
+    /** @noinspection PhpUnused */
     protected function compileFile($expression)
     {
         $args = $this->getArgs($expression);
@@ -940,7 +949,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'table', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndTable($expression)
     {
         $parent = @\array_pop($this->htmlItem);
@@ -951,7 +960,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'table_end', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileTableBody($expression)
     {
         $parent = \end($this->htmlItem);
@@ -963,7 +972,7 @@ trait BladeOneHtml
         $html .= $this->phpTag.' foreach(' . $parent['value'] . ' as ' . $parent['alias'] . ') { ?>';
         return $html;
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndTableBody($expression)
     {
         $parent = @\array_pop($this->htmlItem);
@@ -974,7 +983,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return ' '.$this->phpTag.' } ?>' . $this->render($args, 'tablebody_end', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileTableHead($expression)
     {
         $args = $this->getArgs($expression);
@@ -982,7 +991,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablehead', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndTableHead($expression)
     {
         $parent = @\array_pop($this->htmlItem);
@@ -993,7 +1002,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablehead_end', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileTableFooter($expression)
     {
         $args = $this->getArgs($expression);
@@ -1001,7 +1010,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablefooter', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndTableFooter($expression)
     {
         $parent = @\array_pop($this->htmlItem);
@@ -1021,7 +1030,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablerows', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileEndTableRows($expression)
     {
         $parent = @\array_pop($this->htmlItem);
@@ -1032,7 +1041,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablerows_end', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileCell($expression)
     {
         $parent = \end($this->htmlItem);
@@ -1045,7 +1054,7 @@ trait BladeOneHtml
 
         return $this->render($args, 'cell', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileLabel($expression)
     {
         $args = $this->getArgs($expression);
@@ -1059,7 +1068,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'image', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileHidden($expression)
     {
         $args = $this->getArgs($expression);
@@ -1067,7 +1076,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'input', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileAlert($expression)
     {
         $args = $this->getArgs($expression);
@@ -1080,17 +1089,17 @@ trait BladeOneHtml
         // we add a new attribute with the type of the current open tag
         $parent = \end($this->htmlItem);
         $x = \trim($expression);
-        $x = "('{$parent}'," . \substr($x, 1);
-        return $this->phpTag . "echo \$this->trio{$x}; ?>";
+        $x = "('$parent'," . \substr($x, 1);
+        return $this->phpTag . "echo \$this->trio$x; ?>";
     }
-
+    /** @noinspection PhpUnused */
     protected function compileTrios($expression)
     {
         // we add a new attribute with the type of the current open tag
         $parent = \end($this->htmlItem);
         $x = \trim($expression);
-        $x = "('{$parent}'," . \substr($x, 1);
-        return $this->phpTag . "echo \$this->trios{$x}; ?>";
+        $x = "('$parent'," . \substr($x, 1);
+        return $this->phpTag . "echo \$this->trios$x; ?>";
     }
 
 
