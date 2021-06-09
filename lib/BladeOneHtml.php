@@ -10,9 +10,11 @@
 
 namespace eftec\bladeonehtml;
 
+use eftec\MessageContainer;
+
 /**
  * trait BladeOneHtml
- * Copyright (c) 2020 Jorge Patricio Castro Castillo MIT License. Don't delete this comment, its part of the license.
+ * Copyright (c) 2021 Jorge Patricio Castro Castillo MIT License. Don't delete this comment, its part of the license.
  * It adds the next tags
  * <code>
  * @form()
@@ -23,7 +25,7 @@ namespace eftec\bladeonehtml;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.7.1
+ * @version  1.8
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -40,6 +42,10 @@ trait BladeOneHtml
             'select'          => '{{pre}}<select{{inner}} >{{between}}{{post}}',
             'select_item'     => '<option{{inner}} >{{between}}</option>',
             'select_end'      => '</select>',
+            'message'           => '{{pre}}<span{{inner}} >{{between}}</span>{{post}}',
+            'messages'          => '{{pre}}<ul{{inner}} >{{between}}{{post}}',
+            'messages_item'     => "<li{{inner}} >{{between}}</li>\n",
+            'messages_end'      => '</ul>',
             'checkbox'        => '{{pre}}<input type="checkbox" {{inner}} >{{between}}</input>{{post}}',
             'radio'           => '{{pre}}<input type="radio" {{inner}} >{{between}}</input>{{post}}',
             'textarea'        => '{{pre}}<textarea {{inner}} >{{between}}</textarea>{{post}}',
@@ -100,6 +106,55 @@ trait BladeOneHtml
     {
         //echo 'loading this';
     }
+
+    /** @var MessageContainer */
+    protected $messageContainer;
+
+    //<editor-fold desc="definitions function message">
+    /**
+     * @param MessageContainer $messageContainer
+     * @return MessageContainer
+     */
+    public function message($messageContainer=null) {
+        if($messageContainer!==null) {
+            $this->messageContainer=$messageContainer;
+            return $messageContainer;
+        }
+        if($this->messageContainer!==null) {
+            // already injected, returning instance
+            return $this->messageContainer;
+        }
+        if(function_exists('message')) {
+            // self inject a function called message() if any.
+            $this->messageContainer=message();
+        }  else {
+            // create a new instance of message container.
+            $this->messageContainer=new MessageContainer();
+        }
+        return $this->messageContainer;
+    }
+
+    /**
+     * <pre>
+     * @ message(id='id' default='default' level='error')
+     * </pre>
+     *
+     * @param $expression
+     * @return string|string[]
+     */
+    protected function compileMessage($expression) {
+        $args = $this->getArgs($expression);
+        $id=$args['id'];
+        $level=isset($args['level'])?$args['level']:null;
+        $default=isset($args['default'])?$args['default']:"''";
+
+        $args['between'] = "(\$this->message())->get($id)->first($default,$level)";
+        unset($args['value'], $args['id'],$args['level']);
+        $result = ['', '', '', '']; // inner, between, pre, post
+        return $this->render($args, 'message', $result);
+    }
+
+    //</editor-fold desc="definitions function message">
 
     //<editor-fold desc="definitions function">
     
@@ -251,7 +306,7 @@ trait BladeOneHtml
     {
         if (strpos($css, '<link') === false) {
             if(strpos($css,'//')===false) {
-                $css='<?php echo $this->baseUrl.\'/'.$css.'\'; ?>';
+                $css=$this->phpTag.' echo $this->baseUrl.\'/'.$css.'\'; ?>';
             }
             $css = '<link rel="stylesheet" href="' . $css . '">';
         }
@@ -280,7 +335,7 @@ trait BladeOneHtml
     {
         if (strpos($js, '<script') === false) {
             if(strpos($js,'//')===false) {
-                $js='<?php echo $this->baseUrl.\'/'.$js.'\'; ?>';
+                $js=$this->phpTag.' echo $this->baseUrl.\'/'.$js.'\'; ?>';
             }
             $js = '<script type="application/javascript" src="' . $js . '"></script>';
         }
@@ -377,9 +432,12 @@ trait BladeOneHtml
         }
         foreach ($args as $key => $arg) {
             if ($arg !== null) {
-                if ($key === 'selected' || $key === 'checked') {
-                    $result[0] .= ' ' . $this->wrapPHP($arg, '');
-                } else {
+                if ($key === 'selected') {
+                    $result[0] .=  $this->wrapPHP($arg, '');
+                }elseif( $key === 'checked') {
+                    $result[0] .=  $arg;
+                    //$result[0] .= ' ' . $key . '=' . $arg;
+                }  else {
                     $result[0] .= ' ' . $key . '=' . $this->wrapPHP($arg);
                 }
             } else {
@@ -421,8 +479,9 @@ trait BladeOneHtml
         $_pagesize =$args['pagesize'];
         $_pagesize= isset($_pagesize) ? $_pagesize : 5;
         unset($args['pagesize']);
-        
-        $r='<?php // pagination starts ici *********************************************
+
+
+        $r=$this->phpTag.' // pagination starts ici *********************************************
         $_half=floor(('.$_pagesize.'-1)/2); $_p0='.$_current.'-$_half; $_p1='.$_current.'+$_half;
         if($_p0<1) { $_p1 +=1-$_p0; $_p0=1; }
         if($_p1>'.$_numpages.') { $_p1='.$_numpages.'; }
@@ -553,9 +612,8 @@ trait BladeOneHtml
 
         $result = ['', '', '', '']; // inner, between, pre, post
         $htmlItem= $this->render($args, $parent['type'] . '_item', $result);
-        $htmlItem = str_replace('{{checked}}',
-            '<?php echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
-        return $htmlItem;
+        return str_replace('{{checked}}',
+            $this->phpTag.' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
     }
 
     protected function compileItems($expression)
@@ -565,22 +623,30 @@ trait BladeOneHtml
 
         $args = $this->getArgs($expression);
         if (!isset($args['id']) && isset($parent['id'])) {
-            $args['id'] = @$parent['id'];
+            $args['id'] = $parent['id'];
         }
-        if (!isset($args['name'])) {
-            $args['name'] = @$parent['name'];
+        if (!isset($args['name']) && isset($parent['name'])) {
+            $args['name'] = $parent['name'];
         }
         if (!isset($args['idname']) && isset($parent['idname'])) {
             $args['idname'] = isset($parent['idname'])?$parent['idname']:null;
         }
-        if (!isset($args['alias'])) {
-            $args['alias'] = @$parent['alias'];
-        }
-        if (!isset($args['values'])) {
-            $args['values'] = @$parent['values'];
-        }
-        if ($args['value'] === null) {
-            $this->showError('@items with missing tag value', '@items' . $expression, true);
+
+        if($parent['type']==='messages') {
+            $args['values']='$this->message()';
+            $args['alias'] = '$_msg';
+
+            $args['between']='$_msg';
+        } else {
+            if (!isset($args['alias'])) {
+                $args['alias'] = @$parent['alias'];
+            }
+            if (!isset($args['values'])) {
+                $args['values'] = @$parent['values'];
+            }
+            if ($args['value'] === null) {
+                $this->showError('@items with missing tag value', '@items' . $expression, true);
+            }
         }
         if ($args['values'] === null) {
             $this->showError('@items with missing tag values', '@items' . $expression, true);
@@ -594,11 +660,29 @@ trait BladeOneHtml
         }
         $result = ['', '', '', '']; // inner, between, pre, post
 
-        $name = $args['values'];
-        $nameOG = $args['alias'] . 'Optgroup';
-        $nameKey = $args['alias'] . 'Key';
+
+        if($parent['type']==='messages') {
+            if (isset($args['level'])) {
+                $level = $args['level'];
+            } else {
+                $level = isset($parent['level'])
+                    ? $parent['level']
+                    : '';
+            }
+            $id=isset($args['id'])?$args['id']:'false';
+            $nameOG="\$_msgs=@{$id}? \$this->message()->get({$id})->all($level) 
+            : \$this->message()->allArray($level) ;\n \$_tmp";
+            $name='$_msgs';
+            $nameKey='$_msgk';
+        } else {
+            $nameOG = $args['alias'] . 'Optgroup';
+            $name = $args['values'];
+            $nameKey='$_msgk';
+        }
+
+
         $html
-            = '<?php ' . $nameOG . '=\'\';  foreach(' . $name . ' as ' . $nameKey . '=>' . $args['alias'] . ') {'
+            = $this->phpTag.' ' . $nameOG . '=\'\';  foreach(' . $name . ' as ' . $nameKey . '=>' . $args['alias'] . ') {'
             . "\n";
         if (isset($args['optgroup'])) {
             $html .= "if({$args['optgroup']}!=" . $nameOG . ") {
@@ -607,18 +691,28 @@ trait BladeOneHtml
                 }";
         }
         $html .= "?>\n";
-        unset($args['values'], $args['alias']);
+        unset($args['values'], $args['alias'],$args['level'],$args['idname']);
 
-        $checkedname = ($parent['type'] === 'select') ? 'selected' : 'checked';
+        if ($parent['type'] === 'select') {
+            $checkedname = 'selected';
+        } else {
+            if ($parent['type'] === 'messages') {
+                $checkedname = 'x';
+            } else {
+                $checkedname = 'checked';
+            }
+        }
 
-        $args['checked'] = '{{checked}}'; //<?php if(1==1)?"checked":""; >';
-
-        $args['id'] = $this->addInsideQuote(@$args['id'], '_' . $nameKey);
+        if($parent['type']!=='messages') {
+            // not checked for messages
+            $args['checked'] = '{{checked}}'; //<?php if(1==1)?"checked":""; >';
+        }
+        $args['id'] =isset($args['id']) ? $this->addInsideQuote($args['id'],'_').'.'. $nameKey : $nameKey;
         $htmlItem = $this->render($args, $parent['type'] . '_item', $result);
         $htmlItem = str_replace('{{checked}}',
-            '<?php echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
+            $this->phpTag.' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
         $html .= $htmlItem;
-        $html .= "<?php } // foreach  ?>\n";
+        $html .= $this->phpTag." } // foreach  ?>\n";
         return $html;
     }
 
@@ -633,21 +727,35 @@ trait BladeOneHtml
         return $this->render($args, 'textarea', $result);
     }
 
+    /**
+     * @param string $expression
+     * @param string $type=['checkbox','radio'][$i]
+     * @return string|string[]
+     */
+    protected function renderCheckBoxRadio($expression,$type) {
 
-    protected function compileCheckbox($expression)
-    {
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
-        $args['checked'] = (isset($args['checked']) && $this->stripQuotes($args['checked'])) ? 'checked' : '';
-        return $this->render($args, 'checkbox', $result);
+        if(isset($args['checked'])) {
+            if(!$this->isVariablePHP($args['checked'])) {
+                // constant or some fixed value
+                $args['checked'] = $this->stripQuotes($args['checked']) ? 'checked' : '';
+            } else {
+                // variable
+                $args['checked']=$this->wrapPHP($args['checked']."?'checked':''",'',false);
+            }
+        }
+        return $this->render($args, $type, $result);
+    }
+    protected function compileCheckbox($expression)
+    {
+        $this->renderCheckBoxRadio($expression,'radio');
+
     }
 
     protected function compileRadio($expression)
     {
-        $args = $this->getArgs($expression);
-        $result = ['', '', '', '']; // inner, between, pre, post
-        $args['checked'] = (isset($args['checked']) && $this->stripQuotes($args['checked'])) ? 'checked' : '';
-        return $this->render($args, 'radio', $result);
+        $this->renderCheckBoxRadio($expression,'checkbox');
     }
 
     protected function compileButton($expression)
@@ -671,15 +779,7 @@ trait BladeOneHtml
     protected function compileCheckboxes($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = [
-            'type'   => 'checkboxes',
-            'value'  => @$args['value'],
-            'values' => @$args['values'],
-            'alias'  => @$args['alias'],
-            'id'     => @$args['id'],
-            'name'   => @$args['name'],
-            'idname' => @$args['idname']
-        ];
+        $this->htmlItem[] = $this->constructorItem('checkboxes',$args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'checkboxes', $result);
@@ -697,15 +797,7 @@ trait BladeOneHtml
     protected function compileRadios($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = [
-            'type'   => 'radios',
-            'value'  => @$args['value'],
-            'values' => @$args['values'],
-            'alias'  => @$args['alias'],
-            'id'     => @$args['id'],
-            'name'   => @$args['name'],
-            'idname' => @$args['idname']
-        ];
+        $this->htmlItem[] = $this->constructorItem('radios',$args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'radios', $result);
@@ -723,15 +815,7 @@ trait BladeOneHtml
     protected function compileUl($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = [
-            'type'   => 'ul',
-            'value'  => @$args['value'],
-            'values' => @$args['values'],
-            'alias'  => @$args['alias'],
-            'id'     => @$args['id'],
-            'name'   => @$args['name'],
-            'idname' => @$args['idname']
-        ];
+        $this->htmlItem[] = $this->constructorItem('ul',$args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'ul', $result);
@@ -745,22 +829,45 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+    protected function compileMessages($expression)
+    {
+        $args = $this->getArgs($expression);
+        $newItem= $this->constructorItem('messages',$args);
+        $newItem['level']=isset($args['level'])?$args['level']:null;
+        $this->htmlItem[] =$newItem;
+
+        unset($args['values'], $args['alias'], $args['level']);
+        $result = ['', '', '', '']; // inner, between, pre, post
+        return $this->render($args, 'messages', $result);
+    }
+
+    protected function compileEndMessages()
+    {
+        $parent = @\array_pop($this->htmlItem);
+        if ($parent === null) {
+            $this->showError('@endmessages', 'Missing @messages or so many @endmessages', true);
+        }
+        return $this->pattern[$parent['type'] . '_end'];
+    }
 
     protected function compileOl($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = [
-            'type'   => 'ol',
-            'value'  => @$args['value'],
-            'values' => @$args['values'],
-            'alias'  => @$args['alias'],
-            'id'     => @$args['id'],
-            'name'   => @$args['name'],
-            'idname' => @$args['idname']
-        ];
+        $this->htmlItem[] = $this->constructorItem('ol',$args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'ol', $result);
+    }
+    protected function constructorItem($type,&$args) {
+        return [
+            'type'   => $type,
+            'value'  => isset($args['value'])?$args['value']:null,
+            'values' => isset($args['values'])?$args['values']:null,
+            'alias'  => isset($args['alias'])?$args['alias']:null,
+            'id'     => isset($args['id'])?$args['id']:null,
+            'name'   => isset($args['name'])?$args['name']:null,
+            'idname' => isset($args['idname'])?$args['idname']:null,
+        ];
     }
 
     protected function compileEndOl()
@@ -853,7 +960,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
 
         $html = $this->render($args, 'tablebody', $result);
-        $html .= '<?php foreach(' . $parent['value'] . ' as ' . $parent['alias'] . ') { ?>';
+        $html .= $this->phpTag.' foreach(' . $parent['value'] . ' as ' . $parent['alias'] . ') { ?>';
         return $html;
     }
 
@@ -865,7 +972,7 @@ trait BladeOneHtml
         }
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
-        return ' <?php } ?>' . $this->render($args, 'tablebody_end', $result);
+        return ' '.$this->phpTag.' } ?>' . $this->render($args, 'tablebody_end', $result);
     }
 
     protected function compileTableHead($expression)

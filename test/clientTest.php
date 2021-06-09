@@ -121,8 +121,8 @@ alert(2);</script>
         self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testTextArea() {
-        $template='@textarea(id="aaa" value="3333 3333 aaa3333 ")';
-        $html='<textarea  id="aaa" >3333 3333 aaa3333 </textarea>';
+        $template='@textarea(id="aaa" value="3333 3333 aaa3333")';
+        $html='<textarea  id="aaa" >3333 3333 aaa3333</textarea>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
     public function testTable() {

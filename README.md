@@ -832,12 +832,14 @@ protected function compileDatePicker($expression) {
 }
 ```
 
->  Note: It's better to add jQuery and date picker once
+>  Note: It's better to add the library of jQuery and date picker once in our code
 
 
 
 ## Version history
 
+* 1.8 2021/06/09 
+   * @checkbox and @radio now works with variables. The element is checked only if the value is not null, empty or zero.
 * 1.7.1 2021/02/06
     * @item now marks the value "checked" or "selected" if the values is equals to the curent value of the parent object
     * Bootstrap 4 CDN now it uses the version 4.6    
