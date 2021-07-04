@@ -15,7 +15,7 @@ This library works in two ways:
 [![php](https://img.shields.io/badge/php->5.6-green.svg)]()
 [![php](https://img.shields.io/badge/php-7.x-green.svg)]()
 [![php](https://img.shields.io/badge/php-8.x-green.svg)]()
-[![CocoaPods](https://img.shields.io/badge/docs-70%25-yellow.svg)]()
+[![CocoaPods](https://img.shields.io/badge/docs-71%25-yellow.svg)]()
 
 [TOC]
 
@@ -838,6 +838,8 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 1.8.1 2021/07/03
+  * It solves a problem when the argument is defined as id="somevalue$id"  
 * 1.8 2021/06/09 
    * @checkbox and @radio now works with variables. The element is checked only if the value is not null, empty or zero.
 * 1.7.1 2021/02/06

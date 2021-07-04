@@ -25,7 +25,7 @@ use eftec\MessageContainer;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.8
+ * @version  1.8.1
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -156,7 +156,7 @@ trait BladeOneHtml
     //</editor-fold desc="definitions function message">
 
     //<editor-fold desc="definitions function">
-    
+
     public function useBootstrap3($useCDN = false)
     {
         // Amazing but it still highly used and it works fine.
@@ -189,7 +189,7 @@ trait BladeOneHtml
                 . 'crossorigin="anonymous"></script>', 'bootstrap');
         }
     }
-    
+
     public function useBootstrap4($useCDN = false)
     {
         $this->style='bootstrap4';
@@ -242,7 +242,7 @@ trait BladeOneHtml
                         crossorigin="anonymous"></script>', 'bootstrap');
         }
     }
-    
+
     //</editor-fold>
 
     /**
@@ -255,8 +255,8 @@ trait BladeOneHtml
     public function addArgUrl($newArg) {
         $get=array_merge($_GET,$newArg);
         return $this->getCurrentUrl(true).'?'.http_build_query($get);
-    }   
-    
+    }
+
 
 
     /**
@@ -274,7 +274,7 @@ trait BladeOneHtml
      * <pre>
      * $this->setTranslation(['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']]);
      * </pre>
-     * 
+     *
      * @param array $translationControl
      *
      * @return $this
@@ -283,11 +283,11 @@ trait BladeOneHtml
     {
         foreach($translationControl as $k=>$v) {
             $this->translationControl[$k]=$v; // add or replace    
-        }         
+        }
         return $this;
     }
- 
-    
+
+
     /**
      * It adds a css to the css box. It could be added the link tag, the full url or the relative url.<br>
      * The name is used to avoid to repeat the same style. If a style exists, then it is not added<br>
@@ -297,7 +297,7 @@ trait BladeOneHtml
      * $this->addCss('<link href='...'>','bootstrap'); // it is not added (bootstrap already exists)
      * $this->addCss('https://domain.dom/css.css'); // <link href='https://domain.dom/css.css'>
      * $this->addCss('css/css.css'); // <link href='https://domain.dom/css/css.css'> (it uses $baseurl)
-     * </pre>        
+     * </pre>
      *
      * @param string $css  It could be a url or a link tag.
      * @param string $name if name is empty then it is added. The name avoid to add duplicates
@@ -339,10 +339,10 @@ trait BladeOneHtml
             }
             $js = '<script type="application/javascript" src="' . $js . '"></script>';
         }
-        
+
         if ($name) {
             if (!isset($this->htmlJs[$name])) {
-                $this->htmlJs[$name] = $js;    
+                $this->htmlJs[$name] = $js;
             }
         } else {
             $this->htmlJs[] = $js;
@@ -367,7 +367,7 @@ trait BladeOneHtml
 
     /**
      * Its used internally to render an object.
-     * 
+     *
      * @param array  $args          An associative array with the arguments of the function.
      * @param string $pattern       The name of the pattern. This must be already defined in $this->pattern<br>
      *                        It could also be used to define the default class ($this->defaultClass)
@@ -488,7 +488,7 @@ trait BladeOneHtml
         echo \'<ul class="pagination">\';
         $_url=$this->addArgUrl(['.$_urlparam.'=>1]);
         echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
-        .$this->translationControl['pagination']['first'].'</a></li>\';
+            .$this->translationControl['pagination']['first'].'</a></li>\';
         if('.$_current.' >1) {
             $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_current.'-1]);
             echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
@@ -519,7 +519,7 @@ trait BladeOneHtml
         echo \'</ul>\';
         // pagination ends *********************************************
         ?>';
-        
+
         $result = ['', $r, '', '']; // inner, between, pre, post
         return $this->render($args, 'pagination', $result);
     }
@@ -560,8 +560,8 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'input', $result);
     }
-    
-    
+
+
     protected function compileSelect($expression)
     {
         $args = $this->getArgs($expression);
@@ -711,7 +711,7 @@ trait BladeOneHtml
             // not checked for messages
             $args['checked'] = '{{checked}}'; //<?php if(1==1)?"checked":""; >';
         }
-        $args['id'] =isset($args['id']) ? $this->addInsideQuote($args['id'],'_').'.'. $nameKey : $nameKey;
+        $args['id'] =isset($args['id']) ? $args['id'].".'_'.". $nameKey : $nameKey;
         $htmlItem = $this->render($args, $parent['type'] . '_item', $result);
         $htmlItem = str_replace('{{checked}}',
             $this->phpTag.' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
@@ -756,7 +756,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileCheckbox($expression)
     {
-       return  $this->renderCheckBoxRadio($expression,'checkbox');
+        return  $this->renderCheckBoxRadio($expression,'checkbox');
 
     }
     /** @noinspection PhpUnused */
@@ -925,7 +925,9 @@ trait BladeOneHtml
         $html = $this->render($args, 'file', $result);
         $args['type'] = '"hidden"';
         if (isset($args['name'])) {
-            $args['name'] = $this->addInsideQuote($args['name'], '_file');
+            //
+            //$args['name'] = $this->addInsideQuote($args['name'], '_file');
+            $args['name'] .= ".'_file'.";
         }
         $args['post'] = $post;
         unset($args['pre'], $args['between']);

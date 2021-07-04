@@ -1,4 +1,10 @@
-<?php /** @noinspection CheckTagEmptyBody */
+<?php /** @noinspection HtmlDeprecatedAttribute */
+/** @noinspection HtmlExtraClosingTag */
+/** @noinspection HtmlRequiredAltAttribute */
+/** @noinspection HtmlUnknownAttribute */
+/** @noinspection HtmlUnknownTarget */
+
+/** @noinspection CheckTagEmptyBody */
 
 namespace eftec\tests;
 
@@ -33,12 +39,13 @@ class clientTest extends TestCase
     }
 
 
-	function setUp()
+	public function setUp()
 	{
 		$this->myBlade=new myBlade();
 		$this->myBlade->setMode(BladeOne::MODE_DEBUG);
 
 	}
+
 	public function testBox() {
 	    $this->myBlade->addJs('<script src="domain.dom/js.js">','alert');
         $this->myBlade->addJs('<script src="domain.dom/js.js">','alert');
@@ -182,23 +189,40 @@ alert(2);</script>
 <option value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</option>
 
 </select>
-'
-            ,$this->myBlade->runString('@select(id="aaa" value=$selection values=$countries alias=$country)
+',$this->myBlade->runString('@select(id="aaa" value=$selection values=$countries alias=$country)
             @item(value=\'aaa\' text=\'hello world\')
 @item(value=\'aaa\' text=\'hello world\')
 @item(value=\'aaa\' text=\'hello world\')
 @items( id="chkx" value=$country->id text=$country->name)
 @endselect
 '));
-    }    
+    }
+    public function testNewVarSelect2() {
+
+        self::assertEquals('<select name="frm_Cham__idSensorxyz" label="Sensorxyz" id="frm_Cham__idSensorxyz" value="" >
+            <option value=\'aaa\' id="frm_Cham__idSensorxyz" name="frm_Cham__idSensorxyz" idname="frm_Cham__idSensorxyz" >hello world</option>
+<option value=\'aaa\' id="frm_Cham__idSensorxyz" name="frm_Cham__idSensorxyz" idname="frm_Cham__idSensorxyz" >hello world</option>
+<option value=\'aaa\' id="frm_Cham__idSensorxyz" name="frm_Cham__idSensorxyz" idname="frm_Cham__idSensorxyz" >hello world</option>
+
+</select>
+',$this->myBlade->runString('@select(name="frm_Cham__idSensor$x" label="Sensor$x" id="frm_Cham__idSensor$x"
+ value=$selection values=$countries alias=$country)
+            @item(value=\'aaa\' text=\'hello world\')
+@item(value=\'aaa\' text=\'hello world\')
+@item(value=\'aaa\' text=\'hello world\')
+@items( id="chkx" value=$country->id text=$country->name)
+@endselect
+',['x'=>'xyz']));
+    }
     public function testNewVar3() {
-	    $this->myBlade->useBootstrap3();
+        $this->myBlade->useBootstrap3();
         $this->myBlade->useBootstrap3(true);
         self::assertEquals('<input type="text" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text")'));
         self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
+
     public function testNewVar4() {
         $this->myBlade->useBootstrap4();
         $this->myBlade->useBootstrap4(true);
