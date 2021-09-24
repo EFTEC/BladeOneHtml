@@ -838,6 +838,8 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 2.0 2021-09-24
+  * Dropped support for PHP 5.x. Updated support for BladeOne 4.0  
 * 1.8.1 2021/07/03
   * It solves a problem when the argument is defined as id="somevalue$id"  
 * 1.8 2021/06/09 

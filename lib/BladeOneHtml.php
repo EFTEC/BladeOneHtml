@@ -1,4 +1,7 @@
-<?php
+<?php /** @noinspection PhpMissingParamTypeInspection */
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection PhpMissingReturnTypeInspection */
+
 /** @noinspection UnknownInspectionInspection
  * @noinspection RequiredAttributes
  * @noinspection HtmlRequiredAltAttribute
@@ -25,7 +28,7 @@ use eftec\MessageContainer;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  1.8.1
+ * @version  2.0
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -144,8 +147,8 @@ trait BladeOneHtml
     protected function compileMessage($expression) {
         $args = $this->getArgs($expression);
         $id=$args['id'];
-        $level=isset($args['level'])?$args['level']:null;
-        $default=isset($args['default'])?$args['default']:"''";
+        $level= $args['level'] ?? null;
+        $default= $args['default'] ?? "''";
 
         $args['between'] = "(\$this->message())->get($id)->first($default,$level)";
         unset($args['value'], $args['id'],$args['level']);
@@ -396,7 +399,7 @@ trait BladeOneHtml
         $end = str_replace(['{{inner}}', '{{between}}', '{{pre}}', '{{post}}', '{{id}}', '{{name}}'], $wrapper, $txt);
 
         foreach ($this->customAttr as $key => $attr) {
-            $end = str_replace('{{' . $key . '}}', isset($customArgs[$key]) ? $customArgs[$key] : $attr, $end);
+            $end = str_replace('{{' . $key . '}}', $customArgs[$key] ?? $attr, $end);
         }
         return $end;
     }
@@ -470,14 +473,14 @@ trait BladeOneHtml
             $this->showError('@pagination', '@pagination: Missing numpages or current arguments', true);
             return '';
         }
-        $_urlparam = isset($args['urlparam'])? $args['urlparam'] :  "'_page'"; // if not urlparam the we use _page as default
+        $_urlparam = $args['urlparam'] ?? "'_page'"; // if not urlparam the we use _page as default
         //unset($args['urlparam'])
         $_numpages = $args['numpages'];
         unset($args['numpages']);
         $_current=$args['current'];
         unset($args['current']);
         $_pagesize =$args['pagesize'];
-        $_pagesize= isset($_pagesize) ? $_pagesize : 5;
+        $_pagesize= $_pagesize ?? 5;
         unset($args['pagesize']);
 
 
@@ -608,7 +611,7 @@ trait BladeOneHtml
             if (isset($args['id'])) {
                 $args['idname'] =$args['id'];
             } else {
-                $args['idname'] = isset($parent['idname'])?$parent['idname']:null; //'_idname'.$this->counterId;
+                $args['idname'] = $parent['idname'] ?? null; //'_idname'.$this->counterId;
             }
 
         }
@@ -636,7 +639,7 @@ trait BladeOneHtml
             $args['name'] = $parent['name'];
         }
         if (!isset($args['idname']) && isset($parent['idname'])) {
-            $args['idname'] = isset($parent['idname'])?$parent['idname']:null;
+            $args['idname'] = $parent['idname'] ?? null;
         }
 
         if($parent['type']==='messages') {
@@ -669,14 +672,8 @@ trait BladeOneHtml
 
 
         if($parent['type']==='messages') {
-            if (isset($args['level'])) {
-                $level = $args['level'];
-            } else {
-                $level = isset($parent['level'])
-                    ? $parent['level']
-                    : '';
-            }
-            $id=isset($args['id'])?$args['id']:'false';
+            $level = $args['level'] ?? $parent['level'] ?? '';
+            $id= $args['id'] ?? 'false';
             $nameOG="\$_msgs=@$id? \$this->message()->get($id)->all($level) 
             : \$this->message()->allArray($level) ;\n \$_tmp";
             $name='$_msgs';
@@ -840,7 +837,7 @@ trait BladeOneHtml
     {
         $args = $this->getArgs($expression);
         $newItem= $this->constructorItem('messages',$args);
-        $newItem['level']=isset($args['level'])?$args['level']:null;
+        $newItem['level']= $args['level'] ?? null;
         $this->htmlItem[] =$newItem;
 
         unset($args['values'], $args['alias'], $args['level']);
@@ -870,12 +867,12 @@ trait BladeOneHtml
     protected function constructorItem($type, &$args) {
         return [
             'type'   => $type,
-            'value'  => isset($args['value'])?$args['value']:null,
-            'values' => isset($args['values'])?$args['values']:null,
-            'alias'  => isset($args['alias'])?$args['alias']:null,
-            'id'     => isset($args['id'])?$args['id']:null,
-            'name'   => isset($args['name'])?$args['name']:null,
-            'idname' => isset($args['idname'])?$args['idname']:null,
+            'value'  => $args['value'] ?? null,
+            'values' => $args['values'] ?? null,
+            'alias'  => $args['alias'] ?? null,
+            'id'     => $args['id'] ?? null,
+            'name'   => $args['name'] ?? null,
+            'idname' => $args['idname'] ?? null,
         ];
     }
     /** @noinspection PhpUnused */
@@ -1063,7 +1060,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'label', $result);
     }
-
+    /** @noinspection PhpUnused */
     protected function compileImage($expression)
     {
         $args = $this->getArgs($expression);
