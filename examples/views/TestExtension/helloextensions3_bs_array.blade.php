@@ -23,7 +23,7 @@
     @item(value='aaa' text='hello world1')
     @item(value='aaa' text='hello world2')
     @item(value='aaa' text='hello world3')
-    @items( value=$country->id text=$country->name)
+    @items( value=$country['id'] text=$country['name'])
 @endselect
 <hr>selectgroup:<br>
 @select(id="aaa" value=$selection values=$countries alias=$country)
@@ -32,7 +32,7 @@
         @item(value='aaa' text='hello world')
         @item(value='aaa' text='hello world')
     @endoptgroup
-    @items( value=$country->id text=$country->name optgroup=$country->continent)
+    @items( value=$country['id'] text=$country['name'] optgroup=$country['continent'])
 @endselect
 
 <br><br>
@@ -85,9 +85,9 @@ aaa3333
     @endtablehead
     @tablebody(id='hello world'  )
         @tablerows(style="background-color:azure")
-            @cell(text=$country->id style="background-color:orange")
-            @cell(text=$country->cod )
-            @cell(text=$country->name)
+            @cell(text=$country['id'] style="background-color:orange")
+            @cell(text=$country['cod'] )
+            @cell(text=$country['name'])
         @endtablerows
     @endtablebody
     @tablefooter
@@ -99,14 +99,14 @@ aaa3333
     @item(value='aaa' text='hello world')
     @item(value='aaa' text='hello world')
     @item(value='aaa' text='hello world')
-    @items(value=$country->id text=$country->name)
+    @items(value=$country['id'] text=$country['name'])
 @endul
 <h2>ol</h2>
 @ol(id="aaa" value=$selection values=$countries alias=$country)
     @item(value='aaa' text='hello world')
     @item(value='aaa' text='hello world')
     @item(value='aaa' text='hello world')
-    @items(value=$country->id text=$country->name)
+    @items(value=$country['id'] text=$country['name'])
 @endol
 <br>
 <br>

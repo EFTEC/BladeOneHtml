@@ -66,6 +66,21 @@ alert(2);</script>
     public function testPagination() {
 	    
     }
+    public function testarguments() {
+
+
+        $r = 'a1=1 a2="hello world" a2b="hello=world" a3=\'hello world\' a4=$a5  ';
+        self::assertEquals(
+            ['a1' => 1, 'a2' => '"hello world"', 'a2b' => '"hello=world"', 'a3' => '\'hello world\'', 'a4' => '$a5']
+            , $this->myBlade->getArgs($r));
+        $r = '1 "hello world" "hello=world" \'hello world\' $a5';
+        self::assertEquals(
+            ['1' => null, '"hello world"' => null, '"hello=world"' => null, '\'hello world\'' => null, '$a5' => null]
+            , $this->myBlade->getArgs($r));
+
+
+    }
+
     
     public function testBasic1() {
         self::assertEquals('abc:<input type="text" idname="hi" id="hi" name="hi" />'
@@ -102,7 +117,7 @@ alert(2);</script>
 @item(value=\'aaa\' text=\'hello world2\' post="<br>")
 @items(values=$countries value=\'id\' text=\'name\' post="<br>")
 @endradios';
-        $html='<div id="radios1" name="aaa" value=""  >
+        $html='<div id="radios1" name="aaa" value="" >
 <input type="radio" value=\'aaa\' id="radios1" name="radios1" idname="radios1" >hello world</input><br>
 <input type="radio" value=\'aaa\' id="radios1" name="radios1" idname="radios1" >hello world2</input><br>
 
@@ -157,7 +172,7 @@ alert(2);</script>
 <th  >cod</th>
 <th  >name</th>
 </tr></thead>
-<tbody  id=\'hello world\'  ></tbody>
+<tbody  id=\'hello world\' ></tbody>
 <tfoot><tr  >
 <td  colspan="3" >id</td>
 </tr></tfoot>

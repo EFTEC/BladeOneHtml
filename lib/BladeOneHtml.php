@@ -34,7 +34,7 @@ use eftec\MessageContainer;
  */
 trait BladeOneHtml
 {
-    /** @var string=['vanilla','bootstrap3','bootstrap4','material'][$i] It sets the current style  */
+    /** @var string=['vanilla','bootstrap3','bootstrap4','bootstrap5','material'][$i] It sets the current style  */
     public $style='vanilla';
     /** @var string[] It stores the list of patterns used by the code */
     public $pattern
@@ -86,7 +86,14 @@ trait BladeOneHtml
             'label'           => '{{pre}}<label {{inner}} >{{between}}</label>{{post}}',
             'image'           => '{{pre}}<img {{inner}} >{{between}}</img>{{post}}',
             'alert'           => '{{pre}}<div {{inner}}>{{between}}</div>{{post}}',
-            'pagination'      => '{{pre}}{{between}}{{post}}'
+            'pagination'      => '{{pre}}{{between}}{{post}}',
+            'container'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'container_end'  => '</div>',
+            'row'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'row_end'  => '</div>',
+            'col'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'col_end'  => '</div>',
+
         ];
     /** @var string[] The class is added to the current element */
     public $defaultClass = [];
@@ -101,6 +108,9 @@ trait BladeOneHtml
 
     private $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
 
+    /** @var MessageContainer */
+    protected $messageContainer;
+
     /**
      * It is the automatic constructor. It is loaded by BladeOne.
      * @noinspection PhpUnused
@@ -109,8 +119,7 @@ trait BladeOneHtml
     {
     }
 
-    /** @var MessageContainer */
-    protected $messageContainer;
+
 
     //<editor-fold desc="definitions function message">
     /**
@@ -162,7 +171,7 @@ trait BladeOneHtml
 
     public function useBootstrap3($useCDN = false)
     {
-        // Amazing but it still highly used and it works fine.
+        // Amazing but it still highly used, and it works fine.
         $this->style='bootstrap3';
         $bs3 = [
             'button'   => 'btn',
@@ -176,19 +185,22 @@ trait BladeOneHtml
             'ol'       => 'list-group',
             'ol_item'  => 'list-group-item',
             'table'    => 'table',
-            'alert'    => 'alert'
+            'alert'    => 'alert',
+            'container' => 'container-fluid',
+            'row' => 'row',
+            'col' => 'col',
         ];
         $this->defaultClass = array_merge($this->defaultClass, $bs3);
         if ($useCDN) {
             $this->addCss('<link rel="stylesheet" '
-                . 'href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" '
-                . 'integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" '
+                . 'href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" '
+                . 'integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" '
                 . 'crossorigin="anonymous">', 'bootstrap');
             $this->addJs('<script src="https://code.jquery.com/jquery-3.5.0.min.js" '
                 . 'integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" '
                 . 'crossorigin="anonymous"></script>', 'jquery');
-            $this->addJs('<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" '
-                . 'integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" '
+            $this->addJs('<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" '
+                . 'integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" '
                 . 'crossorigin="anonymous"></script>', 'bootstrap');
         }
     }
@@ -211,7 +223,10 @@ trait BladeOneHtml
             'ol'            => 'list-group',
             'ol_item'       => 'list-group-item',
             'table'         => 'table',
-            'alert'         => 'alert'
+            'alert'         => 'alert',
+            'container' => 'container-fluid',
+            'row' => 'row',
+            'col' => 'col',
         ];
         $this->defaultClass = array_merge($this->defaultClass, $bs4);
         $this->pattern['checkbox'] = '<!--suppress XmlInvalidId -->
@@ -237,12 +252,60 @@ trait BladeOneHtml
                   src="https://code.jquery.com/jquery-3.5.1.min.js"
                   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
                   crossorigin="anonymous"></script>', 'jquery');
-            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" 
-                    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" 
-                    crossorigin="anonymous"></script>', 'popper');
-            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" 
-                        integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" 
+            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" 
+                        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
                         crossorigin="anonymous"></script>', 'bootstrap');
+        }
+    }
+
+
+    public function useBootstrap5($useCDN = false)
+    {
+        $this->style='bootstrap5';
+        $bs4 = [
+            'button'        => 'btn',
+            'input'         => 'form-control',
+            'textarea'      => 'form-control',
+            'checkbox_item' => 'form-check-input',
+            'select'        => 'form-control',
+            'file'          => 'form-control',
+            'range'         => 'form-range',
+            'radio'         => 'form-check-input',
+            'radio_item'    => 'form-check-input',
+            'ul'            => 'list-group',
+            'ul_item'       => 'list-group-item',
+            'ol'            => 'list-group',
+            'ol_item'       => 'list-group-item',
+            'table'         => 'table',
+            'alert'         => 'alert',
+            'container' => 'container-fluid',
+            'row' => 'row',
+            'col' => 'col',
+        ];
+        $this->defaultClass = array_merge($this->defaultClass, $bs4);
+        $this->pattern['checkbox'] = '<!--suppress XmlInvalidId -->
+<div class="form-check">
+            <input type="checkbox" class="form-check-input" {{inner}}>
+            <label class="form-check-label" for={{id}} >{{between}}</label>
+            </div>{{post}}';
+        $this->pattern['radio'] = '<!--suppress XmlInvalidId -->
+<div class="form-check">
+            <input type="radio" class="form-check-input" {{inner}}>
+            <label class="form-check-label" for={{id}} >{{between}}</label>
+            </div>{{post}}';
+
+        $this->pattern['checkboxes_item'] = $this->pattern['checkbox'];
+        $this->pattern['radios_item'] = $this->pattern['radio'];
+
+        if ($useCDN) {
+            $this->addCss('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+                        rel="stylesheet" 
+                        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+                        crossorigin="anonymous">', 'bootstrap');
+            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+                    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+                    crossorigin="anonymous"></script>', 'bootstrap');
+
         }
     }
 
@@ -303,7 +366,7 @@ trait BladeOneHtml
      * </pre>
      *
      * @param string $css  It could be a url or a link tag.
-     * @param string $name if name is empty then it is added. The name avoid to add duplicates
+     * @param string $name if name is empty then it is added automatically. The name is used to avoid adding duplicates
      */
     public function addCss($css, $name = '')
     {
@@ -332,7 +395,7 @@ trait BladeOneHtml
      * </pre>
      *
      * @param string $js   It must be a link to a javscript
-     * @param string $name if name is empty then it is added. The name avoid to add duplicates
+     * @param string $name if name is empty then it is added. The name avoid adding duplicates
      */
     public function addJs($js, $name = '')
     {
@@ -357,7 +420,7 @@ trait BladeOneHtml
      * It adds a js to js script box.
      *
      * @param string $js   It must be a script (without the tag < script >)
-     * @param string $name if name is empty then it is added. The name avoid to add duplicates
+     * @param string $name if name is empty then it is added. The name avoid adding duplicates
      */
     public function addJsCode($js, $name = '')
     {
@@ -405,11 +468,11 @@ trait BladeOneHtml
     }
 
     /**
-     * It process the arguments ($args) by converting (into PHP code) and returns an array with 5 values ($result).
+     * It processes the arguments ($args) by converting (into PHP code) and returns an array with 5 values ($result).
      *
      * @param array $args          An associative array with the arguments not converted into PHP code.
      * @param array $result        =['inner','between','pre','post','text'] (it is the result array).
-     * @param bool  $escapeBetween (default is true), if true, then 'between' is escaped (_e(..)), otherwise it's not.
+     * @param bool  $escapeBetween (default is true), if true, then 'between' is escaped (_e(...)), otherwise it's not.
      */
     protected function processArgs($args, &$result, $escapeBetween = true)
     {
@@ -453,7 +516,7 @@ trait BladeOneHtml
     //<editor-fold desc="compile function">
 
     /**
-     * This controls only works for type=bootstrap4<br>
+     * This controls only works for type=bootstrap3 and 4<br>
      * <b>Example:</b><br>
      * <pre>
      * @pagination(numpages=999 current=50  pagesize=5 urlparam='_page')
@@ -463,9 +526,9 @@ trait BladeOneHtml
      * @return string|string[]
      */
     protected function compilePagination($expression) {
-        if($this->style!=='bootstrap4' && $this->style!=='bootstrap3') {
-            $this->showError('@pagination', '@pagination: it only works with bootstrap3 or 4 ('.$this->style.'). You must 
-            use useBootstrap3() or useBootstrap4()', true);
+        if($this->style!=='bootstrap4' && $this->style!=='bootstrap3' && $this->style!=='bootstrap5' ) {
+            $this->showError('@pagination', '@pagination: it only works with bootstrap3,4 or 5 ('.$this->style.'). You must 
+            use useBootstrap3(), useBootstrap4() or useBootstrap5()', true);
             return '';
         }
         $args = $this->getArgs($expression);
@@ -606,6 +669,9 @@ trait BladeOneHtml
         if (!isset($args['name'])) {
             $args['name'] = $parent['name'];
         }
+        if (!isset($args['value'])) {
+            $args['value'] = 'null';
+        }
         if (!isset($args['idname'])) {
             $this->counterId++;
             if (isset($args['id'])) {
@@ -622,7 +688,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         $htmlItem= $this->render($args, $parent['type'] . '_item', $result);
         return str_replace('{{checked}}',
-            $this->phpTag.' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
+            $this->phpTag.' echo (' . $args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
     }
 
     /** @noinspection PhpUnused */
@@ -689,7 +755,7 @@ trait BladeOneHtml
             . "\n";
         if (isset($args['optgroup'])) {
             $html .= "if({$args['optgroup']}!=" . $nameOG . ") {
-                echo \"<optgroup label='{$args['optgroup']}'>\";
+                echo \"<optgroup label='\".{$args['optgroup']}.\"'>\";
                 $nameOG={$args['optgroup']};
                 }";
         }
@@ -750,11 +816,65 @@ trait BladeOneHtml
         return $this->render($args, $type, $result);
     }
 
+    /**
+     * @param $expression
+     * @param $nameTag
+     * @return string|string[]
+     */
+    protected function utilGenContainer($expression, $nameTag) {
+        $args = $this->getArgs($expression);
+        $this->htmlItem[] = $this->constructorItem($nameTag,$args);
+        $result = ['', '', '', '']; // inner, between, pre, post
+        return $this->render($args, $nameTag, $result);
+    }
+    protected function utilGenEndContainer($nameTag) {
+        $parent = @\array_pop($this->htmlItem);
+        if ($parent === null) {
+            $this->showError('@'.$nameTag, "Missing @$nameTag or so many @$nameTag", true);
+        }
+        return $this->pattern[$parent['type'] . '_end'];
+    }
+    /** @noinspection PhpUnused */
+    protected function compileContainer($expression)
+    {
+        return $this->utilGenContainer($expression,'container');
+    }
+    /** @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
+     */
+    protected function compileEndContainer($expression)
+    {
+       return $this->utilGenEndContainer('container');
+    }
+    /** @noinspection PhpUnused */
+    protected function compileRow($expression)
+    {
+        return $this->utilGenContainer($expression,'row');
+    }
+    /** @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
+     */
+    protected function compileEndRow($expression)
+    {
+        return $this->utilGenEndContainer('row');
+    }
+    /** @noinspection PhpUnused */
+    protected function compileCol($expression)
+    {
+        return $this->utilGenContainer($expression,'col');
+    }
+    /** @noinspection PhpUnused
+     * @noinspection PhpUnusedParameterInspection
+     */
+    protected function compileEndCol($expression)
+    {
+        return $this->utilGenEndContainer('col');
+    }
+
     /** @noinspection PhpUnused */
     protected function compileCheckbox($expression)
     {
         return  $this->renderCheckBoxRadio($expression,'checkbox');
-
     }
     /** @noinspection PhpUnused */
     protected function compileRadio($expression)

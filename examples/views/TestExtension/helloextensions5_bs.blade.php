@@ -5,9 +5,17 @@
 </head>
 <body>
 
+@container()
+@row()
+    @col(class="bg-primary")
+        col1
+    @endcol()
+    @col(class="bg-secondary")
+        col2
+    @endcol()
+@endrow()
 
-
-<h1>Example of BladeOne Extensions2</h1>
+<h1>Example of BladeOne Extensions2 Bootstrap 5</h1>
 
 @alert(text="hi there" class="alert-danger" customtag="it is a custom tag")<br>
 
@@ -17,7 +25,7 @@
 <hr>
 @image(src="https://via.placeholder.com/350x150")
 <hr>
-@input(id="id1" value="hello world$somevar" type="radio" extra="placeholder='hello123' 555" outer="hi there")
+@input(id="id1" value="hello world$somevar" pre="hello:" post="end" extra="placeholder='hello123' 555" outer="hi there")
 <hr>select:<br>
 @select(id="aaa" value=$selection values=$countries alias=$country)
     @item(value='aaa' text='hello world1')
@@ -44,7 +52,10 @@
 @endselect
 <hr>
 
+
+
 @checkbox(id="idsimple" value="1" checked="1" text="it is a selection")<br>
+
 @checkbox(id="idsimple2" value="1" checked="" text="it is a selection")<br>
 
 @radio(id="idsimple" value="1" checked="1" text="it is a selection")<br>
@@ -64,8 +75,8 @@ aaa3333
 <br>
 
 @checkboxes(id="mycheckbox1" value=$selection alias=$country)
-    @item(id='aa1' text='hello world_1' post="<br>" )
-    @item(id='aa2' text='hello world_2' post="<br>" )
+    @item(id='aa1' text='hello world_1' post="<br>")
+    @item(id='aa2' text='hello world_2' post="<br>")
     @items(values=$countries value='id' text='name' post="<br>")
 @endcheckboxes
 
@@ -112,6 +123,10 @@ aaa3333
 <br>
 <br>
 <br>
+
+
+@endcontainer
+
 @jsbox
 
 @jscodebox(ready=1)

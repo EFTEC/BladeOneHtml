@@ -113,8 +113,9 @@ The method $this->e is used to escape the method.
 > @input(value="hello world" type="text" mycustomtag="hi" )
 >
 > Is converted into
->
-> <input value="hello world" type="text" mycustomtag="hi" />
+````html
+<input value="hello world" type="text" mycustomtag="hi" />
+````
 
 
 
@@ -122,11 +123,11 @@ The method $this->e is used to escape the method.
 
 ### input
 
-It shows a input html.
+It shows an input HTML.
 
 Basic example:
 
-```
+```html
 @input(id="id1" value="hello world$somevar" type="text" )
 ```
 
@@ -147,7 +148,7 @@ Basic example:
 
 It shows a label html
 
-```
+```html
 @label(for="id1" text="hello world:") 
 ```
 
@@ -208,7 +209,7 @@ It renders
 
 ### items
 
-**@items** is an utilitarian tag used inside some tags. This behave depending on of their parent tag. It adds a 
+**@items** is a utilitarian tag used inside some tags. This behave depending on of their parent tag. It adds a 
 multiples lines/rows to the parent object using the tag **values**
 
 > Note: This tag requires some arguments:
@@ -398,7 +399,7 @@ It generates a sorted list
 
 ### pagination
 
-It generates a pagination. It requires bootstrap3 or bootstrap4.  
+It generates a pagination. It requires bootstrap3, bootstrap4 or bootstrap5.  
 
 You can find an example at [examples/examplepagination.php](examples/examplepagination.php)
 
@@ -428,7 +429,7 @@ You can change the name of the buttons **prev** and **next** as follow:
 ```php
 $this->setTranslation(['pagination'=>['prev'=>'<&lt;>','next'=>'&gt;']]);
 ```
-  
+
 ![](docs/pagination.jpg)  
 
 ### table
@@ -459,15 +460,15 @@ It renders a table
 
 #### tablehead
 
-It renders the header of the table (optional). Each cell added inside it, is rendered as "th" html tag
+It renders the header of the table (optional). Each cell added inside it, is rendered as "th" HTML tag
 
 #### tablebody
 
-It renders the body of the table (optional). Each cells added inside it, is rendered as "td" html tag
+It renders the body of the table (optional). Each cells added inside it, is rendered as "td" HTML tag
 
 #### tablefooter
 
-It renders the footer of the table (optional). Each cell added inside it, is rendered as "th" html tag
+It renders the footer of the table (optional). Each cell added inside it, is rendered as "th" HTML tag
 
 #### tablerows
 
@@ -533,7 +534,7 @@ This code adds the tags < script > automatically.
 
 The argument **ready** indicates if we want to execute the function when the document is ready.
 
-How to add a new JavaScript code into the jscodebox?
+How to add a new JavaScript code into the **jscodebox**?
 
 ```php
 $blade->addJsCode('alert("hello");');
@@ -545,9 +546,11 @@ $blade->addJsCode('alert("hello");');
 
 **BladeOneHtml** allows to modify the tags used and to set a default classes for each class.
 
-You can set a default class and tags for Bootstrap 3/4 using the next method (pick only one).
+You can set a default class and tags for Bootstrap 3/4/5 using the next method (pick only one).
 
 ```php
+// if true then it loads the css and js from a cdn into the css and jsbox so it requires @cssbox and @jsbox
+$blade->useBootstrap5(true); 
 // if true then it loads the css and js from a cdn into the css and jsbox so it requires @cssbox and @jsbox
 $blade->useBootstrap4(true); 
 // if true then it loads the css and js from a cdn into the css and jsbox so it requires @cssbox and @jsbox
@@ -575,7 +578,7 @@ Where nametag could be as follow
 | Name          | Description                                                  | Example     | Code                                                 |
 | ------------- | ------------------------------------------------------------ | ----------- | ---------------------------------------------------- |
 | nametag       | It uses the pattern to use when the tag is used              | input       | {{pre}}<input{{inner}} >{{between}}< /input>{{post}} |
-| nametag_empty | The system uses this pattern if the content (between/text) is empty or not set (a self close tag). If not set, then the system uses nametag  even if the content is empty | input_empty | {{pre}}< input{{inner}} />{{post}}                   |
+| nametag_empty | The system uses this pattern if the content (between/text) is empty or not set (a self close tag). If not set, then the system uses **nametag**  even if the content is empty | input_empty | {{pre}}< input{{inner}} />{{post}}                   |
 | nametag_item  | The system uses this pattern for tags @item and @items       | select_item | < option{{inner}} >{{between}}< /option>             |
 | nametag_end   | It uses this pattern when the tag must be closed             | form_end    | < /form>                                             |
 
@@ -619,6 +622,28 @@ And in the view
 ## Methods
 
 The library has a lit of methods that they could be used to initialize and configure the library. They are optionals.
+
+### useBootstrap5
+
+It sets the patterns and classes to be compatible with bootstrap 4. 
+
+if argument is true, then it adds the CSS to the **css box** from the CDN   
+
+Our code
+
+```php
+$blade->useBootstrap5(true); 
+```
+
+#### Note: If we want to use the css box, then we need to add to our view the next code
+
+```html
+<header>
+	@cssbox
+</header>
+```
+
+
 
 ### useBootstrap4
 
@@ -838,6 +863,12 @@ protected function compileDatePicker($expression) {
 
 ## Version history
 
+* 2.2 2021-12-11
+  * fixed a problem with optgroup and when the argument is an associative array. 
+* 2.1 2021-10-01
+  * Added support for Bootstrap 5.0
+  * Updated Bootstrap CDNs
+  * added tags @container, @row, @col
 * 2.0 2021-09-24
   * Dropped support for PHP 5.x. Updated support for BladeOne 4.0  
 * 1.8.1 2021/07/03
@@ -845,12 +876,12 @@ protected function compileDatePicker($expression) {
 * 1.8 2021/06/09 
    * @checkbox and @radio now works with variables. The element is checked only if the value is not null, empty or zero.
 * 1.7.1 2021/02/06
-    * @item now marks the value "checked" or "selected" if the values is equals to the curent value of the parent object
-    * Bootstrap 4 CDN now it uses the version 4.6    
-    * for @item and @items, the field name and idname are created automatically. If id is set, then it uses it.
+    * @item now marks the value "checked" or "selected" if the values is equals to the current value of the parent object
+    * Bootstrap 4 **CDN** now it uses the version 4.6    
+    * for @item and @items, the field name and **idname** are created automatically. If id is set, then it uses it.
 * 1.7 2021/01/12
     * @button now considers value as the value of argument while text the visual content.  
-    * It also uses in_array instead of isset.
+    * It also uses in_array instead of isset().
     * Compatible with PHP 8.x
 * 1.6.1 2020/08/31    
     * Pagination now it has "first" and "last" buttons.
