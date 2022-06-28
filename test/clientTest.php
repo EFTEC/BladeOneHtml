@@ -1,4 +1,5 @@
-<?php /** @noinspection HtmlDeprecatedAttribute */
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection HtmlDeprecatedAttribute */
 /** @noinspection HtmlExtraClosingTag */
 /** @noinspection HtmlRequiredAltAttribute */
 /** @noinspection HtmlUnknownAttribute */
@@ -31,22 +32,24 @@ class clientTest extends TestCase
 	 * @var myBlade
 	 */
 	private $myBlade;
-	
-	function assertEqualsNR($expected,$v) {
+
+	public function assertEqualsNR($expected, $v): void
+    {
 	    $expected=str_replace(["\r\n","\n"],["",""],$expected);
         $v=str_replace(["\r\n","\n"],["",""],$v);
         self::assertEquals($expected,$v);
     }
 
 
-	public function setUp()
+	public function setUp() : void
 	{
 		$this->myBlade=new myBlade();
 		$this->myBlade->setMode(BladeOne::MODE_DEBUG);
 
 	}
 
-	public function testBox() {
+	public function testBox(): void
+    {
 	    $this->myBlade->addJs('<script src="domain.dom/js.js">','alert');
         $this->myBlade->addJs('<script src="domain.dom/js.js">','alert');
         $this->myBlade->addJsCode('alert(2);');
@@ -54,7 +57,7 @@ class clientTest extends TestCase
         $template='@jsbox
 @jscodebox(ready)
 @cssbox';
-        
+
         $html='<script src="domain.dom/js.js">
 <script>
 alert(2);</script>
@@ -62,27 +65,27 @@ alert(2);</script>
 <link rel="stylesheet" href="./style123">';
         $this->assertEqualsNR( $html,$this->myBlade->runString($template));
     }
-    
-    public function testPagination() {
-	    
-    }
-    public function testarguments() {
+
+
+    public function testarguments(): void
+    {
 
 
         $r = 'a1=1 a2="hello world" a2b="hello=world" a3=\'hello world\' a4=$a5  ';
         self::assertEquals(
             ['a1' => 1, 'a2' => '"hello world"', 'a2b' => '"hello=world"', 'a3' => '\'hello world\'', 'a4' => '$a5']
-            , $this->myBlade->getArgs($r));
+            , $this->myBlade->getArgsProxy($r));
         $r = '1 "hello world" "hello=world" \'hello world\' $a5';
         self::assertEquals(
             ['1' => null, '"hello world"' => null, '"hello=world"' => null, '\'hello world\'' => null, '$a5' => null]
-            , $this->myBlade->getArgs($r));
+            , $this->myBlade->getArgsProxy($r));
 
 
     }
 
-    
-    public function testBasic1() {
+
+    public function testBasic1(): void
+    {
         self::assertEquals('abc:<input type="text" idname="hi" id="hi" name="hi" />'
             ,$this->myBlade->runString('@input(type="text" idname="hi" pre="abc:")'));
 		self::assertEquals('<input type="text" />'
@@ -90,7 +93,8 @@ alert(2);</script>
         self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
-    public function testCheckbox() {
+    public function testCheckbox(): void
+    {
 	    $template='@checkbox(id="idsimple" value="1" checked="1" post="it is a selection")';
 	    $html='<input type="checkbox"  id="idsimple" value="1" checked ></input>it is a selection';
         self::assertEquals($html,$this->myBlade->runString($template));
@@ -107,11 +111,12 @@ alert(2);</script>
 </div>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
-    public function testRadio() {
+    public function testRadio(): void
+    {
         $template='@radio(id="idsimple" value="1" checked="1" post="it is a selection")';
         $html='<input type="radio"  id="idsimple" value="1" checked ></input>it is a selection';
         self::assertEquals($html,$this->myBlade->runString($template));
-        
+
         $template='@radios(id="radios1" name="aaa" value=$selection  alias=$country)
 @item(value=\'aaa\' text=\'hello world\' post="<br>")
 @item(value=\'aaa\' text=\'hello world2\' post="<br>")
@@ -124,7 +129,8 @@ alert(2);</script>
 </div>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
-    public function testMisc() {
+    public function testMisc(): void
+    {
         $template='@ul(id="aaa" value=$selection values=$countries alias=$country)
 @item(value=\'aaa\' text=\'hello world\')
 @items(value=$country->id text=$country->name)
@@ -143,12 +149,14 @@ alert(2);</script>
 <div  class="alert-danger" customtag="it is a custom tag">hi there</div><br>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
-    public function testTextArea() {
+    public function testTextArea(): void
+    {
         $template='@textarea(id="aaa" value="3333 3333 aaa3333")';
         $html='<textarea  id="aaa" >3333 3333 aaa3333</textarea>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
-    public function testTable() {
+    public function testTable(): void
+    {
         $template='@table(class="table" values=$countries alias=$country border="1")
 @tablehead  
 @cell(text="id")
@@ -179,7 +187,8 @@ alert(2);</script>
 </table>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
-    public function testButton() {
+    public function testButton(): void
+    {
         $template='<body>
 @form()
 @input(type="text" name="myform" value=$myvalue)
@@ -196,8 +205,9 @@ alert(2);</script>
 </body>';
         self::assertEquals($html,$this->myBlade->runString($template));
     }
-    
-    public function testNewVarSelect() {
+
+    public function testNewVarSelect(): void
+    {
         self::assertEquals('<select id="aaa" value="" >
             <option value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</option>
 <option value=\'aaa\' id="aaa" name="aaa" idname="aaa" >hello world</option>
@@ -212,7 +222,8 @@ alert(2);</script>
 @endselect
 '));
     }
-    public function testNewVarSelect2() {
+    public function testNewVarSelect2(): void
+    {
 
         self::assertEquals('<select name="frm_Cham__idSensorxyz" label="Sensorxyz" id="frm_Cham__idSensorxyz" value="" >
             <option value=\'aaa\' id="frm_Cham__idSensorxyz" name="frm_Cham__idSensorxyz" idname="frm_Cham__idSensorxyz" >hello world</option>
@@ -229,7 +240,8 @@ alert(2);</script>
 @endselect
 ',['x'=>'xyz']));
     }
-    public function testNewVar3() {
+    public function testNewVar3(): void
+    {
         $this->myBlade->useBootstrap3();
         $this->myBlade->useBootstrap3(true);
         self::assertEquals('<input type="text" class="form-control" />'
@@ -238,7 +250,8 @@ alert(2);</script>
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
 
-    public function testNewVar4() {
+    public function testNewVar4(): void
+    {
         $this->myBlade->useBootstrap4();
         $this->myBlade->useBootstrap4(true);
         self::assertEquals('<input type="text" class="form-control" />'
@@ -246,7 +259,8 @@ alert(2);</script>
         self::assertEquals('<input type="text" abc="123" cde=\'123\' efg hij="" class="form-control" />'
             ,$this->myBlade->runString('@input(type="text" abc="123" cde=\'123\' efg hij="")'));
     }
-    public function testtc() {
+    public function testtc(): void
+    {
 	    $pagarray=array('pagination'=>array(        'first' => 'First',
             'prev' => 'Previous',
             'next' => 'Next',
@@ -257,11 +271,12 @@ alert(2);</script>
 
 
     }
-    public function testmsg() {
+    public function testmsg(): void
+    {
 	    $mc=new MessageContainer();
 	    $mc->addItem('msg1','there is an error');
 	    $this->myBlade->message($mc);
 	    self::assertEquals("<span default='' >there is an error</span>",$this->myBlade->runString("@message(id='msg1' level='error' default='')"));
     }
-	
+
 }

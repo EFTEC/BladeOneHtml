@@ -12,9 +12,9 @@ This library works in two ways:
 [![Total Downloads](https://poser.pugx.org/eftec/bladeonehtml/downloads)](https://packagist.org/packages/eftec/bladeonehtml)
 [![Maintenance](https://img.shields.io/maintenance/yes/2021.svg)]()
 [![composer](https://img.shields.io/badge/composer-%3E1.6-blue.svg)]()
-[![php](https://img.shields.io/badge/php->5.6-green.svg)]()
-[![php](https://img.shields.io/badge/php-7.x-green.svg)]()
-[![php](https://img.shields.io/badge/php-8.x-green.svg)]()
+[![php](https://img.shields.io/badge/php-7.2-green.svg)]()
+[![php](https://img.shields.io/badge/php-8.0-green.svg)]()
+[![php](https://img.shields.io/badge/php-8.1-green.svg)]()
 [![CocoaPods](https://img.shields.io/badge/docs-71%25-yellow.svg)]()
 
 [TOC]
@@ -862,7 +862,9 @@ protected function compileDatePicker($expression) {
 
 
 ## Version history
-
+* 2.3 2022-02-04
+  * Now this library is compatible with PHP 7.2 and higher.
+  * Some cleanups and type hinting (return methods)
 * 2.2 2021-12-11
   * fixed a problem with optgroup and when the argument is an associative array. 
 * 2.1 2021-10-01

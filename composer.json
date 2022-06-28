@@ -17,16 +17,11 @@
       "email": "jcastro@eftec.cl"
     }
   ],
-  "config": {
-    "platform": {
-      "php": "7.1.3"
-    }
-  },
   "require": {
-    "php": ">=7.1.3",
+    "php": ">=7.2.5",
     "ext-json": "*",
-    "eftec/bladeone": "^4.1",
-    "eftec/messagecontainer": "^1.2"
+    "eftec/bladeone": "^4.4",
+    "eftec/messagecontainer": "^2.1"
   },
   "autoload": {
     "psr-4": {
@@ -39,6 +34,6 @@
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.7"
+    "phpunit/phpunit": "^9.5.11"
   }
 }
