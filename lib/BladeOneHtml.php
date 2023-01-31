@@ -25,7 +25,7 @@ use function trim;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  2.3
+ * @version  2.3.2
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
@@ -580,7 +580,7 @@ trait BladeOneHtml
             echo \'<li class="page-item disabled"><a class="page-link" href="#">'
             .$this->translationControl['pagination']['next'].'</a></li>\';
         }
-        $_url=$this->addArgUrl(['.$_urlparam.'=>$_numpages]);
+        $_url=$this->addArgUrl(['.$_urlparam.'=>$numpages]);
         echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
             .$this->translationControl['pagination']['last'].'</a></li>\';
         echo \'</ul>\';

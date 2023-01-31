@@ -864,6 +864,8 @@ protected function compileDatePicker($expression) {
 
 
 ## Version history
+* 2.3.2 2023-01-31
+  * a typo in pagination 
 * 2.3.1 2023-01-31
   * fixed a problem with pagination.
   * some cleanups
