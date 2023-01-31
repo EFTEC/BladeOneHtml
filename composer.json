@@ -20,8 +20,8 @@
   "require": {
     "php": ">=7.2.5",
     "ext-json": "*",
-    "eftec/bladeone": "^4.4",
-    "eftec/messagecontainer": "^2.1"
+    "eftec/bladeone": "^4.8",
+    "eftec/messagecontainer": "^2.8"
   },
   "autoload": {
     "psr-4": {

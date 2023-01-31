@@ -4,13 +4,14 @@ It is a PHP library that allows to create forms (view) easily, cleanly and witho
 This library works in two ways:
 
 * It compiles a script (our view that use our tags), in a native PHP code.
-* And the next read, if the script exists, then it uses it (instead of re-compiling). And since the script is native code, then it is exactly like to work in vanilla-php but it is way easy to write and to maintenance.
+* And the next read, if the script exists, then it uses it (instead of re-compiling). And since the script is native code, then it is exactly like to work in vanilla-php,
+but it is way easy to write and to maintenance.
 
 
 
 [![Packagist](https://img.shields.io/packagist/v/eftec/bladeonehtml.svg)](https://packagist.org/packages/eftec/bladeonehtml)
 [![Total Downloads](https://poser.pugx.org/eftec/bladeonehtml/downloads)](https://packagist.org/packages/eftec/bladeonehtml)
-[![Maintenance](https://img.shields.io/maintenance/yes/2021.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2023.svg)]()
 [![composer](https://img.shields.io/badge/composer-%3E1.6-blue.svg)]()
 [![php](https://img.shields.io/badge/php-7.2-green.svg)]()
 [![php](https://img.shields.io/badge/php-8.0-green.svg)]()
@@ -26,7 +27,7 @@ This library works in two ways:
 
 > composer require eftec/bladeonehtml
 
-2. And you should extend the class as follow (BladeOneHtml is a Trait)
+2. And you should extend the class as follows (BladeOneHtml is a Trait)
 
 ```php
 include "vendor/autoload.php";
@@ -59,7 +60,7 @@ echo $blade->run("exampleview", ['myvalue'=>$myvalue]);
 
 $blade=new myBlade();
 
-![](docs\img1.jpg)
+![](docs/img1.jpg)
 
 
 
@@ -71,16 +72,16 @@ This library adds a new set of tags for the template. The tags uses named argume
 
 This library uses the native html arguments but some arguments are special
 
-| Argument | Description                                                  | example                                                      |
-| -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| text     | It adds a content between the tags. **The inner value is always un-quoted.** | @tag(text="hello") -> &lt;tag&gt;hello&lt;/tag&gt;           |
-| pre      | It adds a content before the tag                             | @tag(pre="hello") -> hello&lt;tag&gt;&lt;/tag&gt;            |
-| post     | It adds a content after the tag                              | @tag(post="hello") -> &lt;tag&gt;&lt;/tag&gt;hello           |
-| between  | It adds a content between the tags (it works similar than text) | @tag(between="hello") -> &lt;tag&gt;hello&lt;/tag&gt;        |
-| value    | Usually it works as the normal "**value**" of html but it also could works differently (in @textarea works like **text**) | @tag(value="hello") -> < tag value="hello">&lt;/tag&gt;      |
-| values   | Some components needs a list of object/arrays.  This argument is used to sets the list of values | @tag(values=$countries)                                      |
+| Argument | Description                                                                                                                                                                                                  | example                                                                                                   |
+|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| text     | It adds a content between the tags. **The inner value is always un-quoted.**                                                                                                                                 | @tag(text="hello") -> &lt;tag&gt;hello&lt;/tag&gt;                                                        |
+| pre      | It adds a content before the tag                                                                                                                                                                             | @tag(pre="hello") -> hello&lt;tag&gt;&lt;/tag&gt;                                                         |
+| post     | It adds a content after the tag                                                                                                                                                                              | @tag(post="hello") -> &lt;tag&gt;&lt;/tag&gt;hello                                                        |
+| between  | It adds a content between the tags (it works similar than text)                                                                                                                                              | @tag(between="hello") -> &lt;tag&gt;hello&lt;/tag&gt;                                                     |
+| value    | Usually it works as the normal "**value**" of html but it also could works differently (in @textarea works like **text**)                                                                                    | @tag(value="hello") -> < tag value="hello">&lt;/tag&gt;                                                   |
+| values   | Some components needs a list of object/arrays.  This argument is used to sets the list of values                                                                                                             | @tag(values=$countries)                                                                                   |
 | alias    | Some components needs or use a list of object/array. This argument is to reference any row inside the list.  If **values** is set and **alias** is missing, then it creates a new alias called values+"Row". | @tag($values=$countries alias=$country)<br />@tag($values=$countries ) **it asumes  alias=$countriesRow** |
-| optgroup | The tag @select could list grouped elements. This argument is used to set the grouping | @tag($values=$countries alias=$country @optgroup=$country->continent) |
+| optgroup | The tag @select could list grouped elements. This argument is used to set the grouping                                                                                                                       | @tag($values=$countries alias=$country @optgroup=$country->continent)                                     |
 
 Let's say the next example
 
@@ -187,7 +188,7 @@ Example:
 
 ### item
 
-**@item** is an utility tag used inside other tags.  This behave depending on of their parent tag. It adds a simple 
+**@item** is a utility tag used inside other tags.  This behaves depending on of their parent tag. It adds a simple 
 line/row to the parent object.
 
 Example:
@@ -209,14 +210,14 @@ It renders
 
 ### items
 
-**@items** is a utilitarian tag used inside some tags. This behave depending on of their parent tag. It adds a 
+**@items** is a utilitarian tag used inside some tags. This behaves depending on of their parent tag. It adds a 
 multiples lines/rows to the parent object using the tag **values**
 
 > Note: This tag requires some arguments:
 >
 > * the parent(or this tag) requires the tag **values** 
 > * the parent requires the tag **value** It indicates the current selection (if any)
-> * the parent(or this tag) requires the tag **alias** If alias is missing the it uses the name of values + "Row", i.e. values=product -> alias= productRow
+> * the parent(or this tag) requires the tag **alias** If alias is missing then it uses the name of values + "Row", i.e. values=product -> alias= productRow
 > * the parent(or this tag) requires the tag **id**  
 >   * The rendered "id" will be generated using this id+"_"+"id of the row". i.e. id="idproduct" => idproduct_0, idproduct_1
 >   * Why?  It is because the id must be unique (html specs)
@@ -241,11 +242,11 @@ If $countries is a list of arrays then:
 
 Inside the tag items, you could use the next variables
 
-| variable (where values is the variable used)             | Specification                                                |
-| -------------------------------------------------------- | ------------------------------------------------------------ |
-| **$values**OptGroup                                      | It stores the current optgroup (if any). Example: $productOptGroup |
+| variable (where values is the variable used)             | Specification                                                         |
+|----------------------------------------------------------|-----------------------------------------------------------------------|
+| **$values**OptGroup                                      | It stores the current optgroup (if any). Example: $productOptGroup    |
 | **$values**Key                                           | It indicates the current key of the current row. Example: $productKey |
-| $alias (if not alias is set then it uses **$values**Row) | The current row of the variable. Example: $productRow        |
+| $alias (if not alias is set then it uses **$values**Row) | The current row of the variable. Example: $productRow                 |
 
 ### optgroup
 
@@ -317,7 +318,7 @@ Example:
 
 ### link
 
-It adds an hyperlink
+It adds a hyperlink
 
 Example:
 
@@ -424,7 +425,7 @@ Template
 > Note: The page is base 1.
 > Note: the argument urlparam is used to build the link (domain.dom/web.php?_page=999)
 
-You can change the name of the buttons **prev** and **next** as follow:
+You can change the name of the buttons **prev** and **next** as follows:
 
 ```php
 $this->setTranslation(['pagination'=>['prev'=>'<&lt;>','next'=>'&gt;']]);
@@ -464,7 +465,7 @@ It renders the header of the table (optional). Each cell added inside it, is ren
 
 #### tablebody
 
-It renders the body of the table (optional). Each cells added inside it, is rendered as "td" HTML tag
+It renders the body of the table (optional). Each cell added inside the table is rendered as "td" HTML tag
 
 #### tablefooter
 
@@ -480,7 +481,7 @@ It renders a cell inside the tablehead,tablebody (tablerows) or tablefooter
 
 ### cssbox
 
-It render and css added into the box
+It renders and css added into the box
 
 ```html
 <head>   
@@ -499,7 +500,8 @@ $this->addCss('css/stylename.css');
 
 **$css** could be a link or a link tag
 
-**$name** is optional but it avoids to add duplicates. If we add a new CSS with the same name than a previous one, then it is ignored.
+**$name** is optional but it avoids to add duplicates. If we add a new CSS with the same name as
+a previous one, then it is ignored.
 
 ### jsbox
 
@@ -573,25 +575,25 @@ $blade->defaultClass[$tagname]='default class';
 $blade->pattern['nametag']='pattern';
 ```
 
-Where nametag could be as follow
+Where nametag could be as follows
 
-| Name          | Description                                                  | Example     | Code                                                 |
-| ------------- | ------------------------------------------------------------ | ----------- | ---------------------------------------------------- |
-| nametag       | It uses the pattern to use when the tag is used              | input       | {{pre}}<input{{inner}} >{{between}}< /input>{{post}} |
+| Name          | Description                                                                                                                                                                   | Example     | Code                                                 |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|------------------------------------------------------|
+| nametag       | It uses the pattern to use when the tag is used                                                                                                                               | input       | {{pre}}<input{{inner}} >{{between}}< /input>{{post}} |
 | nametag_empty | The system uses this pattern if the content (between/text) is empty or not set (a self close tag). If not set, then the system uses **nametag**  even if the content is empty | input_empty | {{pre}}< input{{inner}} />{{post}}                   |
-| nametag_item  | The system uses this pattern for tags @item and @items       | select_item | < option{{inner}} >{{between}}< /option>             |
-| nametag_end   | It uses this pattern when the tag must be closed             | form_end    | < /form>                                             |
+| nametag_item  | The system uses this pattern for tags @item and @items                                                                                                                        | select_item | < option{{inner}} >{{between}}< /option>             |
+| nametag_end   | It uses this pattern when the tag must be closed                                                                                                                              | form_end    | < /form>                                             |
 
 #### Pattern-Variables inside the code
 
-| variable    | explanation                                                  | Escaped (*)                                                  |
-| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| {{pre}}     | The code before the tag : **pre** &lt;tag  >&lt;/tag&gt;     | no                                                           |
-| {{post}}    | The code after the tag : < tag  >&lt;/tag&gt; **post**       | no                                                           |
-| {{inner}}   | The attributes inside the tag : < tag **inside** > &lt;/tag&gt; | yes                                                          |
-| {{between}} | The content between the tag : < tag >**between**&lt;/tag>    | By default this value is escaped <br />but it could be un-escaped |
-| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > &lt;/tag&gt; | yes                                                          |
-| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > &lt;/tag&gt; | yes                                                          |
+| variable    | explanation                                                                          | Escaped (*)                                                       |
+|-------------|--------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| {{pre}}     | The code before the tag : **pre** &lt;tag  >&lt;/tag&gt;                             | no                                                                |
+| {{post}}    | The code after the tag : < tag  >&lt;/tag&gt; **post**                               | no                                                                |
+| {{inner}}   | The attributes inside the tag : < tag **inside** > &lt;/tag&gt;                      | yes                                                               |
+| {{between}} | The content between the tag : < tag >**between**&lt;/tag>                            | By default this value is escaped <br />but it could be un-escaped |
+| {{id}}      | The id attribute (it is also included in {{inner}}): < tag **id** > &lt;/tag&gt;     | yes                                                               |
+| {{name}}    | The name attribute (it is also included in {{inner}}): < tag **name** > &lt;/tag&gt; | yes                                                               |
 
 Example of a normal tag:
 
@@ -695,7 +697,7 @@ $this->addJs('<script src="js/jquery.js"></script>','jquery');
 
 ### addJSCode
 
-It adds a a javascript code to the **js box**
+It adds a javascript code to the **js box**
 
 ```php
 $blade->addJsCode('alert("hello");');
@@ -811,7 +813,7 @@ protected function compileMyNewTag($expression) {
 
 > Our objective is to render PHP code, not to evaluate a code. For example, if $args['somearg']=$variable, then our value is $variable (as text), no matter the real value of the variable.
 
-You must also create a method to end the container and we must also add a new pattern.
+You must also create a method to end the container, and we must also add a new pattern.
 
 ```php
 $this->pattern['mynewtag_end']='</mycustomtag>';
@@ -862,6 +864,10 @@ protected function compileDatePicker($expression) {
 
 
 ## Version history
+* 2.3.1 2023-01-31
+  * fixed a problem with pagination.
+  * some cleanups
+  * update dependencies.
 * 2.3 2022-02-04
   * Now this library is compatible with PHP 7.2 and higher.
   * Some cleanups and type hinting (return methods)

@@ -1,14 +1,16 @@
 <?php /** @noinspection PhpUnused */
 
 /** @noinspection UnknownInspectionInspection
- * @noinspection RequiredAttributes
  * @noinspection HtmlRequiredAltAttribute
  * @noinspection HtmlUnknownAttribute
- * @noinspection PhpFullyQualifiedNameUsageInspection
  */
 namespace eftec\bladeonehtml;
 
 use eftec\MessageContainer;
+use function array_pop;
+use function end;
+use function substr;
+use function trim;
 
 /**
  * trait BladeOneHtml
@@ -103,7 +105,7 @@ trait BladeOneHtml
 
     private $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
 
-    /** @var MessageContainer */
+    /** @var MessageContainer|null */
     protected $messageContainer;
 
     /**
@@ -112,6 +114,11 @@ trait BladeOneHtml
      */
     public function BladeOneHtml(): void
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
+        if (class_exists('eftec\MessageContainer')) {
+            // autowire MessageContainer if the method exists.
+            $this->messageContainer = MessageContainer::instance();
+        }
     }
 
     //<editor-fold desc="definitions function message">
@@ -119,21 +126,10 @@ trait BladeOneHtml
      * @param MessageContainer $messageContainer
      * @return MessageContainer
      */
-    public function message($messageContainer=null) : MessageContainer {
+    public function message($messageContainer=null) : ?MessageContainer {
         if($messageContainer!==null) {
             $this->messageContainer=$messageContainer;
             return $messageContainer;
-        }
-        if($this->messageContainer!==null) {
-            // already injected, returning instance
-            return $this->messageContainer;
-        }
-        if(function_exists('message')) {
-            // self inject a function called message() if any.
-            $this->messageContainer=message();
-        }  else {
-            // create a new instance of message container.
-            $this->messageContainer=new MessageContainer();
         }
         return $this->messageContainer;
     }
@@ -338,7 +334,7 @@ trait BladeOneHtml
     }
 
     /**
-     * It merge a new translation<br>
+     * It merges a new translation<br>
      * Currently, only the tag <b>@ pagination</b> supports translation.<br>
      * <b>Example:</b><br>
      * <pre>
@@ -655,7 +651,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndSelect()
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endselect', 'Missing @select or so many @endselect', true);
         }
@@ -666,7 +662,7 @@ trait BladeOneHtml
     protected function compileItem($expression)
     {
         // we add a new attribute with the type of the current open tag
-        $parent = \end($this->htmlItem);
+        $parent = end($this->htmlItem);
         $args = $this->getArgs($expression);
         if (!isset($args['id'])) {
             $args['id'] = $parent['id'];
@@ -700,7 +696,7 @@ trait BladeOneHtml
     protected function compileItems($expression): string
     {
         // we add a new attribute with the type of the current open tag
-        $parent = \end($this->htmlItem);
+        $parent = end($this->htmlItem);
 
         $args = $this->getArgs($expression);
         if (!isset($args['id']) && isset($parent['id'])) {
@@ -833,7 +829,7 @@ trait BladeOneHtml
         return $this->render($args, $nameTag, $result);
     }
     protected function utilGenEndContainer($nameTag) {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@'.$nameTag, "Missing @$nameTag or so many @$nameTag", true);
         }
@@ -916,7 +912,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndCheckboxes()
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endcheckboxes', 'Missing @checkboxes or so many @checkboxes', true);
         }
@@ -934,7 +930,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndRadios()
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endradios', 'Missing @radios or so many @radios', true);
         }
@@ -952,7 +948,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndUl()
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endul', 'Missing @ul or so many @endul', true);
         }
@@ -972,7 +968,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndMessages()
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endmessages', 'Missing @messages or so many @endmessages', true);
         }
@@ -1004,7 +1000,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndOl()
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endol', 'Missing @ol or so many @endol', true);
         }
@@ -1077,7 +1073,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndTable($expression)
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endselect', 'Missing @select or so many @endselect', true);
         }
@@ -1088,7 +1084,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileTableBody($expression): string
     {
-        $parent = \end($this->htmlItem);
+        $parent = end($this->htmlItem);
         $args = $this->getArgs($expression);
         $this->htmlItem[] = ['type' => 'tablebody'];
         $result = ['', '', '', '']; // inner, between, pre, post
@@ -1100,7 +1096,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndTableBody($expression): string
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endtablebody', 'Missing @tablebody or so many @endtablebody', true);
         }
@@ -1119,7 +1115,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndTableHead($expression)
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endtablehead', 'Missing @tablehead or so many @endtablehead', true);
         }
@@ -1138,7 +1134,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndTableFooter($expression)
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endtablehead', 'Missing @tablehead or so many @endtablehead', true);
         }
@@ -1149,7 +1145,7 @@ trait BladeOneHtml
 
     protected function compileTableRows($expression)
     {
-        \end($this->htmlItem);
+        end($this->htmlItem);
         $args = $this->getArgs($expression);
         $this->htmlItem[] = ['type' => 'tablerows'];
         $result = ['', '', '', '']; // inner, between, pre, post
@@ -1158,7 +1154,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileEndTableRows($expression)
     {
-        $parent = @\array_pop($this->htmlItem);
+        $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
             $this->showError('@endtablerows', 'Missing @tablerows or so many @endtablerows', true);
         }
@@ -1169,7 +1165,7 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileCell($expression)
     {
-        $parent = \end($this->htmlItem);
+        $parent = end($this->htmlItem);
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
 
@@ -1212,18 +1208,18 @@ trait BladeOneHtml
     protected function compileTrio($expression): string
     {
         // we add a new attribute with the type of the current open tag
-        $parent = \end($this->htmlItem);
-        $x = \trim($expression);
-        $x = "('$parent'," . \substr($x, 1);
+        $parent = end($this->htmlItem);
+        $x = trim($expression);
+        $x = "('$parent'," . substr($x, 1);
         return $this->phpTag . "echo \$this->trio$x; ?>";
     }
     /** @noinspection PhpUnused */
     protected function compileTrios($expression): string
     {
         // we add a new attribute with the type of the current open tag
-        $parent = \end($this->htmlItem);
-        $x = \trim($expression);
-        $x = "('$parent'," . \substr($x, 1);
+        $parent = end($this->htmlItem);
+        $x = trim($expression);
+        $x = "('$parent'," . substr($x, 1);
         return $this->phpTag . "echo \$this->trios$x; ?>";
     }
 
