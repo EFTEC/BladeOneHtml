@@ -580,7 +580,7 @@ trait BladeOneHtml
             echo \'<li class="page-item disabled"><a class="page-link" href="#">'
             .$this->translationControl['pagination']['next'].'</a></li>\';
         }
-        $_url=$this->addArgUrl(['.$_urlparam.'=>$_p1]);
+        $_url=$this->addArgUrl(['.$_urlparam.'=>$_numpages]);
         echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
             .$this->translationControl['pagination']['last'].'</a></li>\';
         echo \'</ul>\';
