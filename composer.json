@@ -18,9 +18,9 @@
     }
   ],
   "require": {
-    "php": ">=7.2.5",
+    "php": ">=7.4",
     "ext-json": "*",
-    "eftec/bladeone": "^4.8",
+    "eftec/bladeone": "^4.12",
     "eftec/messagecontainer": "^2.8"
   },
   "autoload": {

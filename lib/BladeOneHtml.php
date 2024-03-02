@@ -25,16 +25,16 @@ use function trim;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  2.3.2
+ * @version  2.4
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
 trait BladeOneHtml
 {
     /** @var string=['vanilla','bootstrap3','bootstrap4','bootstrap5','material'][$i] It sets the current style  */
-    public $style='vanilla';
+    public string $style='vanilla';
     /** @var string[] It stores the list of patterns used by the code */
-    public $pattern
+    public array $pattern
         = [
             'input'           => '{{pre}}<input{{inner}} >{{between}}</input>{{post}}',
             'input_empty'     => '{{pre}}<input{{inner}} />{{post}}',
@@ -93,20 +93,20 @@ trait BladeOneHtml
 
         ];
     /** @var string[] The class is added to the current element */
-    public $defaultClass = [];
+    public array $defaultClass = [];
     /** @var array It adds a custom adds that it could be used together with $this->pattern */
-    public $customAttr = [];
-    public $counterId=0;
-    protected $htmlCss = []; // indicates the type of the current tag. such as select/selectgroup/etc.
-    protected $htmlJs = []; //indicates the id of the current tag.
-    protected $htmlJsCode = [];
-    protected $htmlItem = [];
-    protected $insideForm = false;
+    public array $customAttr = [];
+    public int $counterId=0;
+    protected array $htmlCss = []; // indicates the type of the current tag. such as select/selectgroup/etc.
+    protected array $htmlJs = []; //indicates the id of the current tag.
+    protected array $htmlJsCode = [];
+    protected array $htmlItem = [];
+    protected bool $insideForm = false;
 
-    private $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
+    private array $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
 
     /** @var MessageContainer|null */
-    protected $messageContainer;
+    protected ?MessageContainer $messageContainer;
 
     /**
      * It is the automatic constructor. It is loaded by BladeOne.
@@ -243,17 +243,17 @@ trait BladeOneHtml
         $this->pattern['radios_item'] = $this->pattern['radio'];
 
         if ($useCDN) {
-            $this->addCss('<link rel="stylesheet" 
-                    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" 
-                    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" 
-                    crossorigin="anonymous">', 'bootstrap');
+            $this->addCss('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
+                integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
+                crossorigin="anonymous">', 'bootstrap');
             $this->addJs('<script
                   src="https://code.jquery.com/jquery-3.5.1.min.js"
                   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
                   crossorigin="anonymous"></script>', 'jquery');
-            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" 
-                        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-                        crossorigin="anonymous"></script>', 'bootstrap');
+            $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" 
+                integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" 
+                crossorigin="anonymous"></script>
+', 'bootstrap');
         }
     }
 
@@ -365,7 +365,7 @@ trait BladeOneHtml
      * $this->addCss('css/css.css'); // <link href='https://domain.dom/css/css.css'> (it uses $baseurl)
      * </pre>
      *
-     * @param string $css  It could be a url or a link tag.
+     * @param string $css  It could be an url or a link tag.
      * @param string $name if name is empty then it is added automatically. The name is used to avoid adding duplicates
      */
     public function addCss($css, $name = ''): void
@@ -537,7 +537,7 @@ trait BladeOneHtml
             $this->showError('@pagination', '@pagination: Missing numpages or current arguments', true);
             return '';
         }
-        $_urlparam = $args['urlparam'] ?? "'_page'"; // if not urlparam the we use _page as default
+        $_urlparam = $args['urlparam'] ?? "'_page'"; // if not urlparam then we use _page as default
         //unset($args['urlparam'])
         $_numpages = $args['numpages'];
         unset($args['numpages']);
@@ -580,7 +580,7 @@ trait BladeOneHtml
             echo \'<li class="page-item disabled"><a class="page-link" href="#">'
             .$this->translationControl['pagination']['next'].'</a></li>\';
         }
-        $_url=$this->addArgUrl(['.$_urlparam.'=>$numpages]);
+        $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_numpages.']);
         echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
             .$this->translationControl['pagination']['last'].'</a></li>\';
         echo \'</ul>\';
@@ -706,7 +706,7 @@ trait BladeOneHtml
             $args['name'] = $parent['name'];
         }
         if (!isset($args['idname']) && isset($parent['idname'])) {
-            $args['idname'] = $parent['idname'] ?? null;
+            $args['idname'] = $parent['idname'];
         }
 
         if($parent['type']==='messages') {
@@ -845,7 +845,7 @@ trait BladeOneHtml
      */
     protected function compileEndContainer($expression)
     {
-       return $this->utilGenEndContainer('container');
+        return $this->utilGenEndContainer('container');
     }
     /** @noinspection PhpUnused */
     protected function compileRow($expression)

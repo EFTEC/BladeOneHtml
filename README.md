@@ -11,15 +11,74 @@ but it is way easy to write and to maintenance.
 
 [![Packagist](https://img.shields.io/packagist/v/eftec/bladeonehtml.svg)](https://packagist.org/packages/eftec/bladeonehtml)
 [![Total Downloads](https://poser.pugx.org/eftec/bladeonehtml/downloads)](https://packagist.org/packages/eftec/bladeonehtml)
-[![Maintenance](https://img.shields.io/maintenance/yes/2023.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)]()
 [![composer](https://img.shields.io/badge/composer-%3E1.6-blue.svg)]()
-[![php](https://img.shields.io/badge/php-7.2-green.svg)]()
+[![php](https://img.shields.io/badge/php-7.4-green.svg)]()
 [![php](https://img.shields.io/badge/php-8.0-green.svg)]()
 [![php](https://img.shields.io/badge/php-8.1-green.svg)]()
 [![CocoaPods](https://img.shields.io/badge/docs-71%25-yellow.svg)]()
 
-[TOC]
 
+<!-- TOC -->
+* [BladeOneHtml](#bladeonehtml)
+  * [Usage](#usage)
+  * [Template basic](#template-basic)
+  * [Template usage](#template-usage)
+    * [input](#input)
+    * [hidden](#hidden)
+    * [label](#label)
+    * [image](#image)
+    * [select](#select)
+    * [item](#item)
+    * [items](#items)
+    * [optgroup](#optgroup)
+    * [checkbox](#checkbox)
+    * [radio](#radio)
+    * [textarea](#textarea)
+    * [button](#button)
+    * [link](#link)
+    * [checkboxes](#checkboxes)
+    * [radios](#radios)
+    * [file](#file)
+    * [ul](#ul)
+    * [ol](#ol)
+    * [pagination](#pagination)
+    * [table](#table)
+      * [tablehead](#tablehead)
+      * [tablebody](#tablebody)
+      * [tablefooter](#tablefooter)
+      * [tablerows](#tablerows)
+      * [cells](#cells)
+    * [cssbox](#cssbox)
+      * [How to add a new css into the cssbox?](#how-to-add-a-new-css-into-the-cssbox)
+    * [jsbox](#jsbox)
+      * [How to add a new JavaScript into the cssbox?](#how-to-add-a-new-javascript-into-the-cssbox)
+    * [jscodebox](#jscodebox)
+  * [Template Customization](#template-customization)
+    * [Set a default class](#set-a-default-class)
+    * [Set a custom pattern](#set-a-custom-pattern)
+      * [Pattern-Variables inside the code](#pattern-variables-inside-the-code)
+      * [Custom attribute](#custom-attribute)
+  * [Methods](#methods)
+    * [useBootstrap5](#usebootstrap5)
+      * [Note: If we want to use the css box, then we need to add to our view the next code](#note-if-we-want-to-use-the-css-box-then-we-need-to-add-to-our-view-the-next-code)
+    * [useBootstrap4](#usebootstrap4)
+      * [Note: If we want to use the css box, then we need to add to our view the next code](#note-if-we-want-to-use-the-css-box-then-we-need-to-add-to-our-view-the-next-code-1)
+    * [useBootstrap3](#usebootstrap3)
+    * [addCss](#addcss)
+    * [addJS](#addjs)
+    * [addJSCode](#addjscode)
+  * [Public Fields](#public-fields)
+    * [$pattern](#pattern)
+    * [$defaultClass](#defaultclass)
+    * [$customAttr](#customattr)
+  * [Creating a new pattern](#creating-a-new-pattern)
+      * [1- Adding a new pattern](#1--adding-a-new-pattern)
+      * [2- Creating a new method](#2--creating-a-new-method)
+      * [3- Creating a new parent Method (container method)](#3--creating-a-new-parent-method-container-method)
+      * [4- Advanced](#4--advanced-)
+  * [Version history](#version-history)
+<!-- TOC -->
 
 ## Usage
 
@@ -864,6 +923,9 @@ protected function compileDatePicker($expression) {
 
 
 ## Version history
+* 2.4 2024-03-02
+  * Updating dependency to PHP 7.4. The extended support of PHP 7.2 ended 3 years ago.
+  * Added more type hinting in the code
 * 2.3.2 2023-01-31
   * a typo in pagination 
 * 2.3.1 2023-01-31

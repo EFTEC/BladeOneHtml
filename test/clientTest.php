@@ -175,7 +175,7 @@ alert(2);</script>
 @endtablefooter
 @endtable';
         $html='<table class="table" border="1" >
-<thead><tr  >  
+<thead><tr  >
 <th  >id</th>
 <th  >cod</th>
 <th  >name</th>
