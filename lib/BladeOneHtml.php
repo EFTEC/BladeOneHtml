@@ -4,6 +4,7 @@
  * @noinspection HtmlRequiredAltAttribute
  * @noinspection HtmlUnknownAttribute
  */
+
 namespace eftec\bladeonehtml;
 
 use eftec\MessageContainer;
@@ -25,88 +26,85 @@ use function trim;
  * </code>
  *
  * @package  BladeOneHtml
- * @version  2.4
+ * @version  2.5
  * @link     https://github.com/EFTEC/BladeOneHtml
  * @author   Jorge Patricio Castro Castillo <jcastro arroba eftec dot cl>
  */
 trait BladeOneHtml
 {
-    /** @var string=['vanilla','bootstrap3','bootstrap4','bootstrap5','material'][$i] It sets the current style  */
-    public string $style='vanilla';
+    /** @var string=['vanilla','bootstrap3','bootstrap4','bootstrap5','material'][$i] It sets the current style */
+    public string $style = 'vanilla';
     /** @var string[] It stores the list of patterns used by the code */
     public array $pattern
         = [
-            'input'           => '{{pre}}<input{{inner}} >{{between}}</input>{{post}}',
-            'input_empty'     => '{{pre}}<input{{inner}} />{{post}}',
-            'file'            => '{{pre}}<input type="file"{{inner}} >{{between}}</input>{{post}}',
-            'select'          => '{{pre}}<select{{inner}} >{{between}}{{post}}',
-            'select_item'     => '<option{{inner}} >{{between}}</option>',
-            'select_end'      => '</select>',
-            'message'           => '{{pre}}<span{{inner}} >{{between}}</span>{{post}}',
-            'messages'          => '{{pre}}<ul{{inner}} >{{between}}{{post}}',
-            'messages_item'     => "<li{{inner}} >{{between}}</li>\n",
-            'messages_end'      => '</ul>',
-            'checkbox'        => '{{pre}}<input type="checkbox" {{inner}} >{{between}}</input>{{post}}',
-            'radio'           => '{{pre}}<input type="radio" {{inner}} >{{between}}</input>{{post}}',
-            'textarea'        => '{{pre}}<textarea {{inner}} >{{between}}</textarea>{{post}}',
-            'button'          => '{{pre}}<button{{inner}} >{{between}}</button>{{post}}',
-            'link'            => '{{pre}}<a{{inner}} >{{between}}</a>{{post}}',
-            'checkboxes'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'input' => '{{pre}}<input{{inner}} >{{between}}</input>{{post}}',
+            'input_empty' => '{{pre}}<input{{inner}} />{{post}}',
+            'file' => '{{pre}}<input type="file"{{inner}} >{{between}}</input>{{post}}',
+            'select' => '{{pre}}<select{{inner}} >{{between}}{{post}}',
+            'select_item' => '<option{{inner}} >{{between}}</option>',
+            'select_end' => '</select>',
+            'message' => '{{pre}}<span{{inner}} >{{between}}</span>{{post}}',
+            'messages' => '{{pre}}<ul{{inner}} >{{between}}{{post}}',
+            'messages_item' => "<li{{inner}} >{{between}}</li>\n",
+            'messages_end' => '</ul>',
+            'checkbox' => '{{pre}}<input type="checkbox" {{inner}} >{{between}}</input>{{post}}',
+            'radio' => '{{pre}}<input type="radio" {{inner}} >{{between}}</input>{{post}}',
+            'textarea' => '{{pre}}<textarea {{inner}} >{{between}}</textarea>{{post}}',
+            'button' => '{{pre}}<button{{inner}} >{{between}}</button>{{post}}',
+            'link' => '{{pre}}<a{{inner}} >{{between}}</a>{{post}}',
+            'checkboxes' => '{{pre}}<div{{inner}} >{{between}}{{post}}',
             'checkboxes_item' => '<input type="checkbox"{{inner}} >{{between}}</input>{{post}}',
-            'checkboxes_end'  => '</div>',
-            'radios'          => '{{pre}}<div{{inner}} >{{between}}{{post}}',
-            'radios_item'     => '<input type="radio"{{inner}} >{{between}}</input>{{post}}',
-            'radios_end'      => '</div>',
-            'ul'              => '{{pre}}<ul{{inner}} >{{between}}{{post}}',
-            'ul_item'         => '<li{{inner}} >{{between}}</li>{{post}}',
-            'ul_end'          => '</ul>',
-            'ol'              => '{{pre}}<ol{{inner}} >{{between}}{{post}}',
-            'ol_item'         => '<li{{inner}} >{{between}}</li>{{post}}',
-            'ol_end'          => '</ol>',
-            'optgroup'        => '{{pre}}<optgroup{{inner}} >{{between}}{{post}}',
-            'optgroup_end'    => '</optgroup>',
-            'table'           => '{{pre}}<table{{inner}} >{{between}}{{post}}',
-            'table_item'      => '<tr {{inner}} >{{between}}</tr>{{post}}',
-            'table_end'       => '</table>',
-            'tablebody'       => '<tbody {{inner}} >{{between}}{{post}}',
-            'tablebody_end'   => '</tbody>',
-            'tablehead'       => '<thead><tr {{inner}} >{{between}}{{post}}',
-            'tablehead_end'   => '</tr></thead>',
-            'tablefooter'     => '<tfoot><tr {{inner}} >{{between}}{{post}}',
+            'checkboxes_end' => '</div>',
+            'radios' => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'radios_item' => '<input type="radio"{{inner}} >{{between}}</input>{{post}}',
+            'radios_end' => '</div>',
+            'ul' => '{{pre}}<ul{{inner}} >{{between}}{{post}}',
+            'ul_item' => '<li{{inner}} >{{between}}</li>{{post}}',
+            'ul_end' => '</ul>',
+            'ol' => '{{pre}}<ol{{inner}} >{{between}}{{post}}',
+            'ol_item' => '<li{{inner}} >{{between}}</li>{{post}}',
+            'ol_end' => '</ol>',
+            'optgroup' => '{{pre}}<optgroup{{inner}} >{{between}}{{post}}',
+            'optgroup_end' => '</optgroup>',
+            'table' => '{{pre}}<table{{inner}} >{{between}}{{post}}',
+            'table_item' => '<tr {{inner}} >{{between}}</tr>{{post}}',
+            'table_end' => '</table>',
+            'tablebody' => '<tbody {{inner}} >{{between}}{{post}}',
+            'tablebody_end' => '</tbody>',
+            'tablehead' => '<thead><tr {{inner}} >{{between}}{{post}}',
+            'tablehead_end' => '</tr></thead>',
+            'tablefooter' => '<tfoot><tr {{inner}} >{{between}}{{post}}',
             'tablefooter_end' => '</tr></tfoot>',
-            'tablerows'       => '<tr {{inner}} >{{between}}{{post}}',
-            'tablerows_end'   => '</tr>',
-            'form'            => '{{pre}}<form {{inner}} >{{between}}{{post}}',
-            'form_end'        => '</form>',
-            'cell'            => '<td {{inner}} >{{between}}</td>{{post}}',
-            'head'            => '<th {{inner}} >{{between}}</th>{{post}}',
-            'label'           => '{{pre}}<label {{inner}} >{{between}}</label>{{post}}',
-            'image'           => '{{pre}}<img {{inner}} >{{between}}</img>{{post}}',
-            'alert'           => '{{pre}}<div {{inner}}>{{between}}</div>{{post}}',
-            'pagination'      => '{{pre}}{{between}}{{post}}',
-            'container'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
-            'container_end'  => '</div>',
-            'row'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
-            'row_end'  => '</div>',
-            'col'      => '{{pre}}<div{{inner}} >{{between}}{{post}}',
-            'col_end'  => '</div>',
-
+            'tablerows' => '<tr {{inner}} >{{between}}{{post}}',
+            'tablerows_end' => '</tr>',
+            'form' => '{{pre}}<form {{inner}} >{{between}}{{post}}',
+            'form_end' => '</form>',
+            'cell' => '<td {{inner}} >{{between}}</td>{{post}}',
+            'head' => '<th {{inner}} >{{between}}</th>{{post}}',
+            'label' => '{{pre}}<label {{inner}} >{{between}}</label>{{post}}',
+            'image' => '{{pre}}<img {{inner}} >{{between}}</img>{{post}}',
+            'alert' => '{{pre}}<div {{inner}}>{{between}}</div>{{post}}',
+            'pagination' => '{{pre}}{{between}}{{post}}',
+            'container' => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'container_end' => '</div>',
+            'row' => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'row_end' => '</div>',
+            'col' => '{{pre}}<div{{inner}} >{{between}}{{post}}',
+            'col_end' => '</div>',
         ];
     /** @var string[] The class is added to the current element */
     public array $defaultClass = [];
     /** @var array It adds a custom adds that it could be used together with $this->pattern */
     public array $customAttr = [];
-    public int $counterId=0;
+    public int $counterId = 0;
     protected array $htmlCss = []; // indicates the type of the current tag. such as select/selectgroup/etc.
     protected array $htmlJs = []; //indicates the id of the current tag.
     protected array $htmlJsCode = [];
     protected array $htmlItem = [];
     protected bool $insideForm = false;
-
-    private array $translationControl=['pagination'=>['first'=>'First','prev'=>'Previous','next'=>'Next','last'=>'Last']];
-
+    private array $translationControl = ['pagination' => ['first' => 'First', 'prev' => 'Previous', 'next' => 'Next', 'last' => 'Last']];
     /** @var MessageContainer|null */
-    protected ?MessageContainer $messageContainer;
+    protected ?MessageContainer $messageContainer = null;
 
     /**
      * It is the automatic constructor. It is loaded by BladeOne.
@@ -122,13 +120,15 @@ trait BladeOneHtml
     }
 
     //<editor-fold desc="definitions function message">
+
     /**
      * @param MessageContainer $messageContainer
-     * @return MessageContainer
+     * @return MessageContainer|null
      */
-    public function message($messageContainer=null) : ?MessageContainer {
-        if($messageContainer!==null) {
-            $this->messageContainer=$messageContainer;
+    public function message(?MessageContainer $messageContainer = null): ?MessageContainer
+    {
+        if ($messageContainer !== null) {
+            $this->messageContainer = $messageContainer;
             return $messageContainer;
         }
         return $this->messageContainer;
@@ -142,14 +142,14 @@ trait BladeOneHtml
      * @param $expression
      * @return string|string[]
      */
-    protected function compileMessage($expression) {
+    protected function compileMessage($expression)
+    {
         $args = $this->getArgs($expression);
-        $id=$args['id'];
-        $level= $args['level'] ?? null;
-        $default= $args['default'] ?? "''";
-
+        $id = $args['id'];
+        $level = $args['level'] ?? null;
+        $default = $args['default'] ?? "''";
         $args['between'] = "(\$this->message())->get($id)->first($default,$level)";
-        unset($args['value'], $args['id'],$args['level']);
+        unset($args['value'], $args['id'], $args['level']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'message', $result);
     }
@@ -165,26 +165,24 @@ trait BladeOneHtml
     }
 
     //</editor-fold desc="definitions function message">
-
     //<editor-fold desc="definitions function">
-
     public function useBootstrap3($useCDN = false): void
     {
         // Amazing but it still highly used, and it works fine.
-        $this->style='bootstrap3';
+        $this->style = 'bootstrap3';
         $bs3 = [
-            'button'   => 'btn',
-            'input'    => 'form-control',
+            'button' => 'btn',
+            'input' => 'form-control',
             'textarea' => 'form-control',
-            'select'   => 'form-control',
-            'file'     => 'form-control-file',
-            'range'    => 'form-control-range',
-            'ul'       => 'list-group',
-            'ul_item'  => 'list-group-item',
-            'ol'       => 'list-group',
-            'ol_item'  => 'list-group-item',
-            'table'    => 'table',
-            'alert'    => 'alert',
+            'select' => 'form-control',
+            'file' => 'form-control-file',
+            'range' => 'form-control-range',
+            'ul' => 'list-group',
+            'ul_item' => 'list-group-item',
+            'ol' => 'list-group',
+            'ol_item' => 'list-group-item',
+            'table' => 'table',
+            'alert' => 'alert',
             'container' => 'container-fluid',
             'row' => 'row',
             'col' => 'col',
@@ -206,23 +204,23 @@ trait BladeOneHtml
 
     public function useBootstrap4($useCDN = false): void
     {
-        $this->style='bootstrap4';
+        $this->style = 'bootstrap4';
         $bs4 = [
-            'button'        => 'btn',
-            'input'         => 'form-control',
-            'textarea'      => 'form-control',
+            'button' => 'btn',
+            'input' => 'form-control',
+            'textarea' => 'form-control',
             'checkbox_item' => 'form-check-input',
-            'select'        => 'form-control',
-            'file'          => 'form-control-file',
-            'range'         => 'form-control-range',
-            'radio'         => 'form-check-input',
-            'radio_item'    => 'form-check-input',
-            'ul'            => 'list-group',
-            'ul_item'       => 'list-group-item',
-            'ol'            => 'list-group',
-            'ol_item'       => 'list-group-item',
-            'table'         => 'table',
-            'alert'         => 'alert',
+            'select' => 'form-control',
+            'file' => 'form-control-file',
+            'range' => 'form-control-range',
+            'radio' => 'form-check-input',
+            'radio_item' => 'form-check-input',
+            'ul' => 'list-group',
+            'ul_item' => 'list-group-item',
+            'ol' => 'list-group',
+            'ol_item' => 'list-group-item',
+            'table' => 'table',
+            'alert' => 'alert',
             'container' => 'container-fluid',
             'row' => 'row',
             'col' => 'col',
@@ -238,10 +236,8 @@ trait BladeOneHtml
             <input type="radio" class="custom-control-input" {{inner}}>
             <label class="custom-control-label" for={{id}} >{{between}}</label>
             </div>{{post}}';
-
         $this->pattern['checkboxes_item'] = $this->pattern['checkbox'];
         $this->pattern['radios_item'] = $this->pattern['radio'];
-
         if ($useCDN) {
             $this->addCss('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" 
                 integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" 
@@ -257,26 +253,25 @@ trait BladeOneHtml
         }
     }
 
-
     public function useBootstrap5($useCDN = false): void
     {
-        $this->style='bootstrap5';
+        $this->style = 'bootstrap5';
         $bs4 = [
-            'button'        => 'btn',
-            'input'         => 'form-control',
-            'textarea'      => 'form-control',
+            'button' => 'btn',
+            'input' => 'form-control',
+            'textarea' => 'form-control',
             'checkbox_item' => 'form-check-input',
-            'select'        => 'form-control',
-            'file'          => 'form-control',
-            'range'         => 'form-range',
-            'radio'         => 'form-check-input',
-            'radio_item'    => 'form-check-input',
-            'ul'            => 'list-group',
-            'ul_item'       => 'list-group-item',
-            'ol'            => 'list-group',
-            'ol_item'       => 'list-group-item',
-            'table'         => 'table',
-            'alert'         => 'alert',
+            'select' => 'form-control',
+            'file' => 'form-control',
+            'range' => 'form-range',
+            'radio' => 'form-check-input',
+            'radio_item' => 'form-check-input',
+            'ul' => 'list-group',
+            'ul_item' => 'list-group-item',
+            'ol' => 'list-group',
+            'ol_item' => 'list-group-item',
+            'table' => 'table',
+            'alert' => 'alert',
             'container' => 'container-fluid',
             'row' => 'row',
             'col' => 'col',
@@ -292,10 +287,8 @@ trait BladeOneHtml
             <input type="radio" class="form-check-input" {{inner}}>
             <label class="form-check-label" for={{id}} >{{between}}</label>
             </div>{{post}}';
-
         $this->pattern['checkboxes_item'] = $this->pattern['checkbox'];
         $this->pattern['radios_item'] = $this->pattern['radio'];
-
         if ($useCDN) {
             $this->addCss('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
                         rel="stylesheet" 
@@ -304,7 +297,6 @@ trait BladeOneHtml
             $this->addJs('<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
                     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
                     crossorigin="anonymous"></script>', 'bootstrap');
-
         }
     }
 
@@ -319,11 +311,9 @@ trait BladeOneHtml
      */
     public function addArgUrl($newArg): string
     {
-        $get=array_merge($_GET,$newArg);
-        return $this->getCurrentUrl(true).'?'.http_build_query($get);
+        $get = array_merge($_GET, $newArg);
+        return $this->getCurrentUrl(true) . '?' . http_build_query($get);
     }
-
-
 
     /**
      * @return array
@@ -347,12 +337,11 @@ trait BladeOneHtml
      */
     public function setTranslationControl($translationControl): self
     {
-        foreach($translationControl as $k=>$v) {
-            $this->translationControl[$k]=$v; // add or replace
+        foreach ($translationControl as $k => $v) {
+            $this->translationControl[$k] = $v; // add or replace
         }
         return $this;
     }
-
 
     /**
      * It adds a css to the css box. It could be added the link tag, the full url or the relative url.<br>
@@ -371,8 +360,8 @@ trait BladeOneHtml
     public function addCss($css, $name = ''): void
     {
         if (strpos($css, '<link') === false) {
-            if(strpos($css,'//')===false) {
-                $css=$this->phpTag.' echo $this->baseUrl.\'/'.$css.'\'; ?>';
+            if (strpos($css, '//') === false) {
+                $css = $this->phpTag . ' echo $this->baseUrl.\'/' . $css . '\'; ?>';
             }
             $css = '<link rel="stylesheet" href="' . $css . '">';
         }
@@ -400,12 +389,11 @@ trait BladeOneHtml
     public function addJs($js, $name = ''): void
     {
         if (strpos($js, '<script') === false) {
-            if(strpos($js,'//')===false) {
-                $js='<?php echo $this->baseUrl.\'/'.$js.'\'; ?>';
+            if (strpos($js, '//') === false) {
+                $js = '<?php echo $this->baseUrl.\'/' . $js . '\'; ?>';
             }
             $js = '<script type="application/javascript" src="' . $js . '"></script>';
         }
-
         if ($name) {
             if (!isset($this->htmlJs[$name])) {
                 $this->htmlJs[$name] = $js;
@@ -414,7 +402,6 @@ trait BladeOneHtml
             $this->htmlJs[] = $js;
         }
     }
-
 
     /**
      * It adds a js to js script box.
@@ -436,7 +423,7 @@ trait BladeOneHtml
      *
      * @param array  $args          An associative array with the arguments of the function.
      * @param string $pattern       The name of the pattern. This must be already defined in $this->pattern<br>
-     *                        It could also be used to define the default class ($this->defaultClass)
+     *                              It could also be used to define the default class ($this->defaultClass)
      * @param array  $wrapper       =['inner','between','pre','post','text']
      * @param bool   $escapeBetween if true (default), 'between' is escape. If false, then 'between' is not escaped
      *
@@ -460,7 +447,6 @@ trait BladeOneHtml
         $wrapper[4] = $this->wrapPHP(@$args['id']);
         $wrapper[5] = $this->wrapPHP(@$args['name']);
         $end = str_replace(['{{inner}}', '{{between}}', '{{pre}}', '{{post}}', '{{id}}', '{{name}}'], $wrapper, $txt);
-
         foreach ($this->customAttr as $key => $attr) {
             $end = str_replace('{{' . $key . '}}', $customArgs[$key] ?? $attr, $end);
         }
@@ -480,30 +466,30 @@ trait BladeOneHtml
             $args['id'] = $args['idname'];
             $args['name'] = $args['idname'];
         }
-        if (array_key_exists('between',$args)) {
+        if (array_key_exists('between', $args)) {
             $result[1] .= $this->wrapPHP($this->stripQuotes($args['between']), '', $escapeBetween);
             unset($args['between']);
         }
-        if (array_key_exists('pre',$args)) {
+        if (array_key_exists('pre', $args)) {
             $result[2] .= $this->wrapPHP($this->stripQuotes($args['pre']), '', false);
             unset($args['pre']);
         }
-        if (array_key_exists('post',$args)) {
+        if (array_key_exists('post', $args)) {
             $result[3] .= $this->wrapPHP($this->stripQuotes($args['post']), '', false);
             unset($args['post']);
         }
-        if (array_key_exists('text',$args)) {
+        if (array_key_exists('text', $args)) {
             $result[1] .= $this->wrapPHP($this->stripQuotes($args['text']), '');
             unset($args['text']);
         }
         foreach ($args as $key => $arg) {
             if ($arg !== null) {
                 if ($key === 'selected') {
-                    $result[0] .=  $this->wrapPHP($arg, '');
-                }elseif( $key === 'checked') {
-                    $result[0] .=  $arg;
+                    $result[0] .= $this->wrapPHP($arg, '');
+                } elseif ($key === 'checked') {
+                    $result[0] .= $arg;
                     //$result[0] .= ' ' . $key . '=' . $arg;
-                }  else {
+                } else {
                     $result[0] .= ' ' . $key . '=' . $this->wrapPHP($arg);
                 }
             } else {
@@ -526,14 +512,15 @@ trait BladeOneHtml
      * @return string|string[]
      * @noinspection PhpUnused
      */
-    protected function compilePagination($expression) {
-        if($this->style!=='bootstrap4' && $this->style!=='bootstrap3' && $this->style!=='bootstrap5' ) {
-            $this->showError('@pagination', '@pagination: it only works with bootstrap3,4 or 5 ('.$this->style.'). You must 
+    protected function compilePagination($expression)
+    {
+        if ($this->style !== 'bootstrap4' && $this->style !== 'bootstrap3' && $this->style !== 'bootstrap5') {
+            $this->showError('@pagination', '@pagination: it only works with bootstrap3,4 or 5 (' . $this->style . '). You must 
             use useBootstrap3(), useBootstrap4() or useBootstrap5()', true);
             return '';
         }
         $args = $this->getArgs($expression);
-        if(!isset($args['numpages'], $args['current'])) {
+        if (!isset($args['numpages'], $args['current'])) {
             $this->showError('@pagination', '@pagination: Missing numpages or current arguments', true);
             return '';
         }
@@ -541,52 +528,49 @@ trait BladeOneHtml
         //unset($args['urlparam'])
         $_numpages = $args['numpages'];
         unset($args['numpages']);
-        $_current=$args['current'];
+        $_current = $args['current'];
         unset($args['current']);
-        $_pagesize =$args['pagesize'];
-        $_pagesize= $_pagesize ?? 5;
+        $_pagesize = $args['pagesize'];
+        $_pagesize = $_pagesize ?? 5;
         unset($args['pagesize']);
-
-
-        $r=$this->phpTag.' // pagination starts ici *********************************************
-        $_half=floor(('.$_pagesize.'-1)/2); $_p0='.$_current.'-$_half; $_p1='.$_current.'+$_half;
+        $r = $this->phpTag . ' // pagination starts ici *********************************************
+        $_half=floor((' . $_pagesize . '-1)/2); $_p0=' . $_current . '-$_half; $_p1=' . $_current . '+$_half;
         if($_p0<1) { $_p1 +=1-$_p0; $_p0=1; }
-        if($_p1>'.$_numpages.') { $_p1='.$_numpages.'; }
+        if($_p1>' . $_numpages . ') { $_p1=' . $_numpages . '; }
         echo \'<ul class="pagination">\';
-        $_url=$this->addArgUrl(['.$_urlparam.'=>1]);
+        $_url=$this->addArgUrl([' . $_urlparam . '=>1]);
         echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
-            .$this->translationControl['pagination']['first'].'</a></li>\';
-        if('.$_current.' >1) {
-            $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_current.'-1]);
+            . $this->translationControl['pagination']['first'] . '</a></li>\';
+        if(' . $_current . ' >1) {
+            $_url=$this->addArgUrl([' . $_urlparam . '=>' . $_current . '-1]);
             echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
-            .$this->translationControl['pagination']['prev'].'</a></li>\';
+            . $this->translationControl['pagination']['prev'] . '</a></li>\';
         } else {
             echo \'<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">'
-            .$this->translationControl['pagination']['prev'].'</a></li>\';
+            . $this->translationControl['pagination']['prev'] . '</a></li>\';
         }
         for($_pag=$_p0;$_pag<=$_p1;$_pag++) {
-            $_url=$this->addArgUrl(['.$_urlparam.'=>$_pag]);
-            if($_pag == '.$_current.') {
+            $_url=$this->addArgUrl([' . $_urlparam . '=>$_pag]);
+            if($_pag == ' . $_current . ') {
                 echo \'<li class="page-item active"><span class="page-link">\'.$_pag.\'</span></li>\';
             } else {
                 echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'">\'.$_pag.\'</a></li>\';    
             }                
         } 
-        if('.$_current.' <'.$_numpages.') {
-            $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_current.'+1]);
+        if(' . $_current . ' <' . $_numpages . ') {
+            $_url=$this->addArgUrl([' . $_urlparam . '=>' . $_current . '+1]);
             echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'">'
-            .$this->translationControl['pagination']['next'].'</a></li>\';
+            . $this->translationControl['pagination']['next'] . '</a></li>\';
         } else {
             echo \'<li class="page-item disabled"><a class="page-link" href="#">'
-            .$this->translationControl['pagination']['next'].'</a></li>\';
+            . $this->translationControl['pagination']['next'] . '</a></li>\';
         }
-        $_url=$this->addArgUrl(['.$_urlparam.'=>'.$_numpages.']);
+        $_url=$this->addArgUrl([' . $_urlparam . '=>' . $_numpages . ']);
         echo \'<li class="page-item"><a class="page-link" href="\'.$_url.\'" tabindex="-1">'
-            .$this->translationControl['pagination']['last'].'</a></li>\';
+            . $this->translationControl['pagination']['last'] . '</a></li>\';
         echo \'</ul>\';
         // pagination ends *********************************************
         ?>';
-
         $result = ['', $r, '', '']; // inner, between, pre, post
         return $this->render($args, 'pagination', $result);
     }
@@ -607,7 +591,6 @@ trait BladeOneHtml
     protected function compilejsCodeBox($expression): string
     {
         $args = $this->getArgs($expression);
-
         $js = "<script>\n";
         if (isset($args['ready'])) {
             $js .= "document.addEventListener(\"DOMContentLoaded\", function(event) { \n";
@@ -628,23 +611,20 @@ trait BladeOneHtml
         return $this->render($args, 'input', $result);
     }
 
-
     protected function compileSelect($expression)
     {
         $args = $this->getArgs($expression);
         $this->htmlItem[] = [
-            'type'   => 'select',
-            'value'  => @$args['value'],
+            'type' => 'select',
+            'value' => @$args['value'],
             'values' => @$args['values'],
-            'alias'  => @$args['alias'],
-            'id'     => @$args['id'],
-            'name'   => null,
+            'alias' => @$args['alias'],
+            'id' => @$args['id'],
+            'name' => null,
             'idname' => null
         ];
-
         $result = ['', '', '', '']; // inner, between, pre, post
         unset($args['values'], $args['alias']);
-
         return $this->render($args, 'select', $result);
     }
 
@@ -676,20 +656,17 @@ trait BladeOneHtml
         if (!isset($args['idname'])) {
             $this->counterId++;
             if (isset($args['id'])) {
-                $args['idname'] =$args['id'];
+                $args['idname'] = $args['id'];
             } else {
                 $args['idname'] = $parent['idname'] ?? null; //'_idname'.$this->counterId;
             }
-
         }
         $checkedname = ($parent['type'] === 'select') ? 'selected' : 'checked';
-
         $args['checked'] = '{{checked}}'; //<?php if(1==1)?"checked":""; >';
-
         $result = ['', '', '', '']; // inner, between, pre, post
-        $htmlItem= $this->render($args, $parent['type'] . '_item', $result);
+        $htmlItem = $this->render($args, $parent['type'] . '_item', $result);
         return str_replace('{{checked}}',
-            $this->phpTag.' echo (' . $args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
+            $this->phpTag . ' echo (' . $args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
     }
 
     /** @noinspection PhpUnused */
@@ -697,7 +674,6 @@ trait BladeOneHtml
     {
         // we add a new attribute with the type of the current open tag
         $parent = end($this->htmlItem);
-
         $args = $this->getArgs($expression);
         if (!isset($args['id']) && isset($parent['id'])) {
             $args['id'] = $parent['id'];
@@ -708,12 +684,10 @@ trait BladeOneHtml
         if (!isset($args['idname']) && isset($parent['idname'])) {
             $args['idname'] = $parent['idname'];
         }
-
-        if($parent['type']==='messages') {
-            $args['values']='$this->message()';
+        if ($parent['type'] === 'messages') {
+            $args['values'] = '$this->message()';
             $args['alias'] = '$_msg';
-
-            $args['between']='$_msg';
+            $args['between'] = '$_msg';
         } else {
             if (!isset($args['alias'])) {
                 $args['alias'] = @$parent['alias'];
@@ -736,23 +710,19 @@ trait BladeOneHtml
             }
         }
         $result = ['', '', '', '']; // inner, between, pre, post
-
-
-        if($parent['type']==='messages') {
+        if ($parent['type'] === 'messages') {
             $level = $args['level'] ?? $parent['level'] ?? '';
-            $id= $args['id'] ?? 'false';
-            $nameOG="\$_msgs=@$id? \$this->message()->get($id)->all($level) 
+            $id = $args['id'] ?? 'false';
+            $nameOG = "\$_msgs=@$id? \$this->message()->get($id)->all($level) 
             : \$this->message()->allArray($level) ;\n \$_tmp";
-            $name='$_msgs';
+            $name = '$_msgs';
         } else {
             $nameOG = $args['alias'] . 'Optgroup';
             $name = $args['values'];
         }
-        $nameKey='$_msgk';
-
-
+        $nameKey = '$_msgk';
         $html
-            = $this->phpTag.' ' . $nameOG . '=\'\';  foreach(' . $name . ' as ' . $nameKey . '=>' . $args['alias'] . ') {'
+            = $this->phpTag . ' ' . $nameOG . '=\'\';  foreach(' . $name . ' as ' . $nameKey . '=>' . $args['alias'] . ') {'
             . "\n";
         if (isset($args['optgroup'])) {
             $html .= "if({$args['optgroup']}!=" . $nameOG . ") {
@@ -761,8 +731,7 @@ trait BladeOneHtml
                 }";
         }
         $html .= "?>\n";
-        unset($args['values'], $args['alias'],$args['level'],$args['idname']);
-
+        unset($args['values'], $args['alias'], $args['level'], $args['idname']);
         if ($parent['type'] === 'select') {
             $checkedname = 'selected';
         } else if ($parent['type'] === 'messages') {
@@ -770,26 +739,23 @@ trait BladeOneHtml
         } else {
             $checkedname = 'checked';
         }
-
-        if($parent['type']!=='messages') {
+        if ($parent['type'] !== 'messages') {
             // not checked for messages
             $args['checked'] = '{{checked}}'; //<?php if(1==1)?"checked":""; >';
         }
-        $args['id'] =isset($args['id']) ? $args['id'].".'_'.". $nameKey : $nameKey;
+        $args['id'] = isset($args['id']) ? $args['id'] . ".'_'." . $nameKey : $nameKey;
         $htmlItem = $this->render($args, $parent['type'] . '_item', $result);
         $htmlItem = str_replace('{{checked}}',
-            $this->phpTag.' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
+            $this->phpTag . ' echo (' . @$args['value'] . "=={$parent['value']})?'$checkedname':''; ?>", $htmlItem);
         $html .= $htmlItem;
-        $html .= $this->phpTag." } // foreach  ?>\n";
+        $html .= $this->phpTag . " } // foreach  ?>\n";
         return $html;
     }
-
 
     /** @noinspection PhpUnused */
     protected function compileTextArea($expression)
     {
         $args = $this->getArgs($expression);
-
         $args['between'] = $this->stripQuotes(@$args['value']);
         unset($args['value']);
         $result = ['', '', '', '']; // inner, between, pre, post
@@ -798,20 +764,20 @@ trait BladeOneHtml
 
     /**
      * @param string $expression
-     * @param string $type=['checkbox','radio'][$i]
+     * @param string $type =['checkbox','radio'][$i]
      * @return string|string[]
      */
-    protected function renderCheckBoxRadio($expression,$type) {
-
+    protected function renderCheckBoxRadio($expression, $type)
+    {
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
-        if(isset($args['checked'])) {
-            if(!$this->isVariablePHP($args['checked'])) {
+        if (isset($args['checked'])) {
+            if (!$this->isVariablePHP($args['checked'])) {
                 // constant or some fixed value
                 $args['checked'] = $this->stripQuotes($args['checked']) ? ' checked' : '';
             } else {
                 // variable
-                $args['checked']=$this->wrapPHP($args['checked']."?' checked':''",'',false);
+                $args['checked'] = $this->wrapPHP($args['checked'] . "?' checked':''", '', false);
             }
         }
         return $this->render($args, $type, $result);
@@ -822,24 +788,29 @@ trait BladeOneHtml
      * @param $nameTag
      * @return string|string[]
      */
-    protected function utilGenContainer($expression, $nameTag) {
+    protected function utilGenContainer($expression, $nameTag)
+    {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = $this->constructorItem($nameTag,$args);
+        $this->htmlItem[] = $this->constructorItem($nameTag, $args);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, $nameTag, $result);
     }
-    protected function utilGenEndContainer($nameTag) {
+
+    protected function utilGenEndContainer($nameTag)
+    {
         $parent = @array_pop($this->htmlItem);
         if ($parent === null) {
-            $this->showError('@'.$nameTag, "Missing @$nameTag or so many @$nameTag", true);
+            $this->showError('@' . $nameTag, "Missing @$nameTag or so many @$nameTag", true);
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileContainer($expression)
     {
-        return $this->utilGenContainer($expression,'container');
+        return $this->utilGenContainer($expression, 'container');
     }
+
     /** @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
@@ -847,11 +818,13 @@ trait BladeOneHtml
     {
         return $this->utilGenEndContainer('container');
     }
+
     /** @noinspection PhpUnused */
     protected function compileRow($expression)
     {
-        return $this->utilGenContainer($expression,'row');
+        return $this->utilGenContainer($expression, 'row');
     }
+
     /** @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
@@ -859,11 +832,13 @@ trait BladeOneHtml
     {
         return $this->utilGenEndContainer('row');
     }
+
     /** @noinspection PhpUnused */
     protected function compileCol($expression)
     {
-        return $this->utilGenContainer($expression,'col');
+        return $this->utilGenContainer($expression, 'col');
     }
+
     /** @noinspection PhpUnused
      * @noinspection PhpUnusedParameterInspection
      */
@@ -875,24 +850,25 @@ trait BladeOneHtml
     /** @noinspection PhpUnused */
     protected function compileCheckbox($expression)
     {
-        return  $this->renderCheckBoxRadio($expression,'checkbox');
+        return $this->renderCheckBoxRadio($expression, 'checkbox');
     }
+
     /** @noinspection PhpUnused */
     protected function compileRadio($expression)
     {
-        return $this->renderCheckBoxRadio($expression,'radio');
+        return $this->renderCheckBoxRadio($expression, 'radio');
     }
+
     /** @noinspection PhpUnused */
     protected function compileButton($expression)
     {
         $args = $this->getArgs($expression);
-
         $args['between'] = $this->stripQuotes(@$args['text']);
         unset($args['text']);
-
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'button', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileLink($expression)
     {
@@ -900,15 +876,17 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'link', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileCheckboxes($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = $this->constructorItem('checkboxes',$args);
+        $this->htmlItem[] = $this->constructorItem('checkboxes', $args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'checkboxes', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndCheckboxes()
     {
@@ -918,15 +896,17 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileRadios($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = $this->constructorItem('radios',$args);
+        $this->htmlItem[] = $this->constructorItem('radios', $args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'radios', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndRadios()
     {
@@ -936,15 +916,17 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileUl($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = $this->constructorItem('ul',$args);
+        $this->htmlItem[] = $this->constructorItem('ul', $args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'ul', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndUl()
     {
@@ -954,17 +936,18 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+
     protected function compileMessages($expression)
     {
         $args = $this->getArgs($expression);
-        $newItem= $this->constructorItem('messages',$args);
-        $newItem['level']= $args['level'] ?? null;
-        $this->htmlItem[] =$newItem;
-
+        $newItem = $this->constructorItem('messages', $args);
+        $newItem['level'] = $args['level'] ?? null;
+        $this->htmlItem[] = $newItem;
         unset($args['values'], $args['alias'], $args['level']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'messages', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndMessages()
     {
@@ -974,11 +957,12 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileOl($expression)
     {
         $args = $this->getArgs($expression);
-        $this->htmlItem[] = $this->constructorItem('ol',$args);
+        $this->htmlItem[] = $this->constructorItem('ol', $args);
         unset($args['values'], $args['alias']);
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'ol', $result);
@@ -988,15 +972,16 @@ trait BladeOneHtml
     protected function constructorItem($type, &$args): array
     {
         return [
-            'type'   => $type,
-            'value'  => $args['value'] ?? null,
+            'type' => $type,
+            'value' => $args['value'] ?? null,
             'values' => $args['values'] ?? null,
-            'alias'  => $args['alias'] ?? null,
-            'id'     => $args['id'] ?? null,
-            'name'   => $args['name'] ?? null,
+            'alias' => $args['alias'] ?? null,
+            'id' => $args['id'] ?? null,
+            'name' => $args['name'] ?? null,
             'idname' => $args['idname'] ?? null,
         ];
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndOl()
     {
@@ -1006,6 +991,7 @@ trait BladeOneHtml
         }
         return $this->pattern[$parent['type'] . '_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileForm($expression)
     {
@@ -1014,6 +1000,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'form', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndForm()
     {
@@ -1022,6 +1009,7 @@ trait BladeOneHtml
         }
         return $this->pattern['form_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileOptGroup($expression)
     {
@@ -1029,11 +1017,13 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'optgroup', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndOptGroup()
     {
         return $this->pattern['optgroup_end'];
     }
+
     /** @noinspection PhpUnused */
     protected function compileFile($expression): string
     {
@@ -1058,18 +1048,18 @@ trait BladeOneHtml
     {
         $args = $this->getArgs($expression);
         $this->htmlItem[] = [
-            'type'   => 'table',
-            'value'  => @$args['values'],
-            'id'     => null,
-            'name'   => null,
+            'type' => 'table',
+            'value' => @$args['values'],
+            'id' => null,
+            'name' => null,
             'idname' => null,
-            'alias'  => @$args['alias']
+            'alias' => @$args['alias']
         ];
         unset($args['values'], $args['alias']);
-
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'table', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndTable($expression)
     {
@@ -1081,6 +1071,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'table_end', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileTableBody($expression): string
     {
@@ -1088,11 +1079,11 @@ trait BladeOneHtml
         $args = $this->getArgs($expression);
         $this->htmlItem[] = ['type' => 'tablebody'];
         $result = ['', '', '', '']; // inner, between, pre, post
-
         $html = $this->render($args, 'tablebody', $result);
-        $html .= $this->phpTag.' foreach(' . $parent['value'] . ' as ' . $parent['alias'] . ') { ?>';
+        $html .= $this->phpTag . ' foreach(' . $parent['value'] . ' as ' . $parent['alias'] . ') { ?>';
         return $html;
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndTableBody($expression): string
     {
@@ -1102,8 +1093,9 @@ trait BladeOneHtml
         }
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
-        return ' '.$this->phpTag.' } ?>' . $this->render($args, 'tablebody_end', $result);
+        return ' ' . $this->phpTag . ' } ?>' . $this->render($args, 'tablebody_end', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileTableHead($expression)
     {
@@ -1112,6 +1104,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablehead', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndTableHead($expression)
     {
@@ -1123,6 +1116,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablehead_end', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileTableFooter($expression)
     {
@@ -1131,6 +1125,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablefooter', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndTableFooter($expression)
     {
@@ -1151,6 +1146,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablerows', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileEndTableRows($expression)
     {
@@ -1162,19 +1158,19 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'tablerows_end', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileCell($expression)
     {
         $parent = end($this->htmlItem);
         $args = $this->getArgs($expression);
         $result = ['', '', '', '']; // inner, between, pre, post
-
         if ($parent['type'] === 'tablehead') {
             return $this->render($args, 'head', $result);
         }
-
         return $this->render($args, 'cell', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileLabel($expression)
     {
@@ -1182,6 +1178,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'label', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileImage($expression)
     {
@@ -1189,6 +1186,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'image', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileHidden($expression)
     {
@@ -1197,6 +1195,7 @@ trait BladeOneHtml
         $result = ['', '', '', '']; // inner, between, pre, post
         return $this->render($args, 'input', $result);
     }
+
     /** @noinspection PhpUnused */
     protected function compileAlert($expression)
     {
@@ -1213,6 +1212,7 @@ trait BladeOneHtml
         $x = "('$parent'," . substr($x, 1);
         return $this->phpTag . "echo \$this->trio$x; ?>";
     }
+
     /** @noinspection PhpUnused */
     protected function compileTrios($expression): string
     {
@@ -1222,7 +1222,5 @@ trait BladeOneHtml
         $x = "('$parent'," . substr($x, 1);
         return $this->phpTag . "echo \$this->trios$x; ?>";
     }
-
-
     //</editor-fold>
 }

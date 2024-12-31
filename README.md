@@ -11,11 +11,10 @@ but it is way easy to write and to maintenance.
 
 [![Packagist](https://img.shields.io/packagist/v/eftec/bladeonehtml.svg)](https://packagist.org/packages/eftec/bladeonehtml)
 [![Total Downloads](https://poser.pugx.org/eftec/bladeonehtml/downloads)](https://packagist.org/packages/eftec/bladeonehtml)
-[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)]()
-[![composer](https://img.shields.io/badge/composer-%3E1.6-blue.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)]()
+[![composer](https://img.shields.io/badge/composer-%3E2.0-blue.svg)]()
 [![php](https://img.shields.io/badge/php-7.4-green.svg)]()
-[![php](https://img.shields.io/badge/php-8.0-green.svg)]()
-[![php](https://img.shields.io/badge/php-8.1-green.svg)]()
+[![php](https://img.shields.io/badge/php-8.4-green.svg)]()
 [![CocoaPods](https://img.shields.io/badge/docs-71%25-yellow.svg)]()
 
 
@@ -923,6 +922,8 @@ protected function compileDatePicker($expression) {
 
 
 ## Version history
+* 2.5 2024-12-31
+  * Updated to PHP 8.4 
 * 2.4 2024-03-02
   * Updating dependency to PHP 7.4. The extended support of PHP 7.2 ended 3 years ago.
   * Added more type hinting in the code
