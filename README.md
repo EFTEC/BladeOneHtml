@@ -1,10 +1,10 @@
 # BladeOneHtml
-It is a PHP library that allows to create forms (view) easily, cleanly and without killing the performance.   It uses the library BladeOne to renders the view. This library only uses a single dependency, one file and nothing more.
+It is a PHP library that allows to create forms (view) easily, cleanly and without killing the performance.   It uses the library BladeOne to render the view. This library only uses a single dependency, one file and nothing more.
 
 This library works in two ways:
 
 * It compiles a script (our view that use our tags), in a native PHP code.
-* And the next read, if the script exists, then it uses it (instead of re-compiling). And since the script is native code, then it is exactly like to work in vanilla-php,
+* And the next read, if the script exists, then it uses it (instead of re-compiling). And since the script is native code, then it is exactly like working in vanilla-php,
 but it is way easy to write and to maintenance.
 
 
